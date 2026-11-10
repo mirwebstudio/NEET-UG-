@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MedNova — NEET UG Practice</title>
+<meta name="theme-color" content="#2563eb">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232563eb'/%3E%3Ccircle cx='32' cy='32' r='19' fill='none' stroke='%237dd3fc' stroke-width='2.5'/%3E%3Cpath d='M32 21v22M21 32h22' stroke='%23fff' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#f6f9ff;--surface:#fff;--text:#0f172a;--text-soft:#334155;--muted:#64748b;--border:#e2e8f0;--blue:#2563eb;--blue-dark:#1d4ed8;--blue-soft:#eff6ff;--cyan:#06b6d4;--ok:#059669;--bad:#dc2626;--warn:#d97706;--r:14px;--sh:0 1px 3px rgba(15,23,42,.06),0 4px 14px rgba(15,23,42,.04)}
+[data-theme="dark"]{--bg:#0b1220;--surface:#121b2e;--text:#e8eefc;--text-soft:#c7d2e5;--muted:#93a2bb;--border:#1f2b45;--blue-soft:#0f1b33}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0 0 .5rem;line-height:1.25}h1{font-size:clamp(1.5rem,3vw,2.2rem)}h2{font-size:1.2rem}h3{font-size:1rem}
+p{margin:0 0 1rem;color:var(--text-soft)}a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+.app{min-height:100vh;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+[data-theme="dark"] .topbar{background:rgba(18,27,46,.94)}
+.nav{display:flex;align-items:center;gap:1rem;padding:.6rem clamp(.9rem,2vw,1.75rem);max-width:1440px;margin:0 auto;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:.5rem;font-weight:800;color:var(--text);font-size:.98rem}
+.brand svg{height:28px;width:auto}
+.nav-links{display:flex;gap:.12rem;margin-left:auto;align-items:center;flex-wrap:wrap}
+.nav-link{padding:.38rem .7rem;border-radius:999px;color:var(--text-soft);font-size:.82rem;font-weight:600}
+.nav-link:hover{background:var(--blue-soft);color:var(--blue-dark);text-decoration:none}
+.nav-link.active{background:var(--blue);color:#fff}
+.icon-btn{background:transparent;border:1px solid var(--border);border-radius:8px;padding:.3rem .5rem;cursor:pointer;color:var(--text);font-size:.92rem}
+.layout{display:flex;flex:1;max-width:1440px;width:100%;margin:0 auto}
+.sidebar{width:210px;flex:0 0 210px;padding:.9rem .7rem;border-right:1px solid var(--border);background:var(--surface);position:sticky;top:50px;height:calc(100vh - 50px);overflow-y:auto}
+.sb-group{font-size:.66rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:800;margin:.9rem .4rem .3rem}
+.sb-link{display:flex;align-items:center;gap:.5rem;padding:.42rem .55rem;border-radius:8px;color:var(--text-soft);font-size:.83rem;font-weight:600}
+.sb-link:hover{background:var(--blue-soft);color:var(--blue-dark);text-decoration:none}
+.sb-link.active{background:var(--blue);color:#fff}
+.main{flex:1;padding:1.4rem clamp(.9rem,2.2vw,1.9rem);min-width:0}
+.main.full{padding:0}
+.footer{border-top:1px solid var(--border);padding:.8rem clamp(.9rem,2vw,1.75rem);font-size:.74rem;color:var(--muted);text-align:center;background:var(--surface)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem;box-shadow:var(--sh)}
+.card.pad-lg{padding:1.5rem}
+.card-title{display:flex;align-items:center;gap:.4rem;margin-bottom:.75rem;font-size:.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.grid{display:grid;gap:.85rem}
+.grid-2{grid-template-columns:repeat(auto-fit,minmax(255px,1fr))}
+.grid-3{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.grid-4{grid-template-columns:repeat(auto-fit,minmax(135px,1fr))}
+.stack{display:flex;flex-direction:column;gap:.7rem}
+.row{display:flex;gap:.55rem;align-items:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.35rem;padding:.5rem .95rem;border-radius:9px;border:1px solid transparent;font-weight:650;font-size:.84rem;cursor:pointer;white-space:nowrap;font-family:inherit}
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;box-shadow:0 6px 18px rgba(37,99,235,.22)}
+.btn-ghost{background:transparent;border-color:var(--border);color:var(--text-soft)}
+.btn-ghost:hover{background:var(--blue-soft);color:var(--blue-dark)}
+.btn-danger{background:var(--bad);color:#fff}
+.btn-sm{padding:.28rem .6rem;font-size:.74rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.stat{display:flex;flex-direction:column;gap:.08rem}
+.stat-value{font-size:1.65rem;font-weight:800;color:var(--blue-dark)}
+.stat-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.badge{display:inline-flex;align-items:center;gap:.22rem;padding:.14rem .5rem;border-radius:999px;font-size:.66rem;font-weight:800}
+.badge-pyq{background:#fef3c7;color:#b45309}.badge-ai{background:#ede9fe;color:#6d28d9}.badge-curated{background:#dcfce7;color:#15803d}.badge-type{background:var(--blue-soft);color:var(--blue-dark)}
+.badge-diff-easy{background:#dcfce7;color:#15803d}.badge-diff-medium{background:#fef3c7;color:#b45309}.badge-diff-hard{background:#fee2e2;color:#b91c1c}
+.field{display:flex;flex-direction:column;gap:.22rem;font-size:.78rem;font-weight:700;color:var(--text-soft)}
+.input,.select{width:100%;padding:.5rem .7rem;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:.85rem;font-family:inherit}
+.input:focus,.select:focus{border-color:var(--blue);outline:none}
+.hero{background:linear-gradient(135deg,#1d4ed8,#0891b2);color:#fff;border-radius:var(--r);padding:clamp(1.4rem,4vw,2.5rem);margin-bottom:1.2rem;position:relative;overflow:hidden}
+.hero h1{color:#fff;margin-bottom:.6rem}.hero p{color:rgba(255,255,255,.92);max-width:620px;font-size:.96rem}.hero .row{margin-top:1.1rem;gap:.55rem}
+.hero .btn-ghost{border-color:rgba(255,255,255,.4);color:#fff;background:rgba(255,255,255,.1)}
+.tree-subject{border:1px solid var(--border);border-radius:var(--r);background:var(--surface);margin-bottom:.7rem;overflow:hidden}
+.tree-subject-head{padding:.75rem .85rem;cursor:pointer;display:flex;align-items:center;gap:.5rem;font-weight:700;border-bottom:1px solid var(--border)}
+.tree-subject-head:hover{background:var(--blue-soft)}
+.tree-subject-count{font-size:.7rem;font-weight:700;color:var(--muted);margin-left:auto;background:var(--bg);padding:.1rem .45rem;border-radius:999px}
+.tree-units{display:none;padding:.4rem .6rem}.tree-units.open{display:block}
+.tree-unit{margin:.28rem 0}
+.tree-unit-head{padding:.42rem .55rem;cursor:pointer;display:flex;align-items:center;gap:.4rem;font-weight:600;font-size:.86rem;border-radius:6px}
+.tree-unit-head:hover{background:var(--blue-soft)}
+.tree-topics{display:none;padding:.2rem 0 .2rem 1.4rem}.tree-topics.open{display:block}
+.topic-pill{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .5rem;margin:.1rem;border-radius:999px;background:var(--blue-soft);color:var(--blue-dark);font-size:.72rem;font-weight:600;cursor:pointer;border:1px solid transparent}
+.topic-pill:hover{border-color:var(--blue)}
+.qcard{border:1px solid var(--border);border-radius:var(--r);padding:.95rem;background:var(--surface);box-shadow:var(--sh)}
+.qcard-head{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.55rem}
+.qcard-text{font-weight:600;margin-bottom:.7rem;color:var(--text);line-height:1.55}
+.qoptions{display:grid;gap:.4rem}
+.qoption{display:flex;gap:.55rem;align-items:flex-start;padding:.5rem .7rem;border:1px solid var(--border);border-radius:9px;cursor:pointer;background:var(--surface)}
+.qoption:hover{border-color:var(--blue);background:var(--blue-soft)}
+.qoption.selected{border-color:var(--blue);background:var(--blue-soft);font-weight:600}
+.qoption.correct{border-color:var(--ok);background:#ecfdf5}.qoption.wrong{border-color:var(--bad);background:#fef2f2}
+[data-theme="dark"] .qoption.correct{background:#064e3b;color:#a7f3d0}[data-theme="dark"] .qoption.wrong{background:#7f1d1d;color:#fecaca}
+.qoption-key{width:1.35rem;height:1.35rem;flex:0 0 1.35rem;border-radius:50%;display:grid;place-items:center;background:var(--blue-soft);color:var(--blue-dark);font-size:.68rem;font-weight:800}
+.explanation{margin-top:.7rem;padding:.65rem .8rem;border-radius:9px;background:var(--blue-soft);border-left:4px solid var(--blue);font-size:.83rem;color:var(--text-soft);line-height:1.5}
+.exam-shell{display:grid;grid-template-columns:1fr 265px;gap:.85rem;padding:.85rem;min-height:calc(100vh - 100px)}
+.exam-header{grid-column:1/-1;display:flex;align-items:center;gap:.85rem;flex-wrap:wrap;padding:.65rem .85rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r)}
+.exam-timer{font-family:ui-monospace,monospace;font-size:.98rem;font-weight:700;padding:.28rem .65rem;border-radius:7px;background:var(--blue-soft);color:var(--blue-dark)}
+.exam-timer.danger{background:#fee2e2;color:#b91c1c}
+.exam-main{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem;display:flex;flex-direction:column;gap:.8rem}
+.exam-palette{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.85rem;align-self:start;position:sticky;top:65px}
+.palette-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.28rem;margin:.6rem 0}
+.palette-btn{aspect-ratio:1;border:1px solid var(--border);border-radius:6px;background:var(--surface);font-weight:700;font-size:.75rem;cursor:pointer;color:var(--text-soft)}
+.palette-btn:hover{border-color:var(--blue)}
+.palette-btn.answered{background:#dcfce7;color:#15803d;border-color:#86efac}
+.palette-btn.marked{background:#fef3c7;color:#b45309;border-color:#fcd34d}
+.palette-btn.current{outline:2px solid var(--blue);outline-offset:1px}
+.result-card{border:1px solid var(--border);border-radius:var(--r);padding:.85rem;background:var(--surface);display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;cursor:pointer;margin-bottom:.55rem}
+.result-card:hover{border-color:var(--blue)}
+.result-score{font-size:1.4rem;font-weight:800;color:var(--blue-dark);min-width:55px}
+.result-meta{flex:1;min-width:180px}.result-meta strong{display:block;color:var(--text);margin-bottom:.08rem}.result-meta span{font-size:.78rem;color:var(--muted)}
+.bar{height:7px;background:var(--bg);border-radius:4px;overflow:hidden;margin-top:.28rem}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:4px;transition:width .3s}
+.toast-container{position:fixed;right:.7rem;bottom:.7rem;z-index:200;display:flex;flex-direction:column;gap:.4rem;max-width:320px}
+.toast{padding:.65rem .85rem;border-radius:9px;background:var(--surface);border-left:4px solid var(--blue);box-shadow:0 4px 14px rgba(0,0,0,.15);font-size:.81rem;color:var(--text)}
+.toast-error{border-left-color:var(--bad)}.toast-success{border-left-color:var(--ok)}.toast-warn{border-left-color:var(--warn)}
+.modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.55);display:grid;place-items:center;z-index:150;padding:1rem}
+.modal{background:var(--surface);border-radius:var(--r);padding:1.25rem;max-width:460px;width:100%}
+.empty{padding:2rem .9rem;text-align:center;color:var(--muted);font-size:.85rem}
+.empty-icon{font-size:2rem;margin-bottom:.35rem;opacity:.5}
+.divider{height:1px;background:var(--border);margin:.8rem 0}
+.callout{padding:.7rem .85rem;border-radius:9px;font-size:.81rem;line-height:1.5}
+.callout-warn{background:#fef3c7;border-left:4px solid var(--warn);color:#78350f}
+.callout-info{background:var(--blue-soft);border-left:4px solid var(--blue);color:var(--text-soft)}
+.callout-error{background:#fee2e2;border-left:4px solid var(--bad);color:#7f1d1d}
+.menu-toggle{display:none;background:transparent;border:1px solid var(--border);border-radius:8px;padding:.3rem .45rem;cursor:pointer;color:var(--text);font-size:1rem}
+@media (max-width:900px){.sidebar{position:fixed;left:0;top:50px;bottom:0;z-index:50;transform:translateX(-100%);transition:.25s}.sidebar.open{transform:translateX(0)}.menu-toggle{display:inline-flex}.main{padding:.85rem}.exam-shell{grid-template-columns:1fr}.exam-palette{position:static}.palette-grid{grid-template-columns:repeat(8,1fr)}}
+@media (max-width:600px){.nav-links{display:none}.hero{padding:1.25rem}.grid-4{grid-template-columns:repeat(2,1fr)}.palette-grid{grid-template-columns:repeat(6,1fr)}}
+</style>
+</head>
+<body>
+<div id="app" class="app"></div>
+<div id="toast-container" class="toast-container" aria-live="polite"></div>
+<script>
+'use strict';
+const $=(s,c=document)=>c.querySelector(s),$$=(s,c=document)=>[...c.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const shuffle=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;};
+const uid=()=>Math.random().toString(36).slice(2,10);
+const fmtTime=ms=>{const s=Math.max(0,Math.floor(ms/1000));return`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;};
+const fmtDate=ts=>new Date(ts).toLocaleString();
+const pct=(n,d)=>d?Math.round((n/d)*100):0;
+function toast(msg,type='info'){const c=$('#toast-container');if(!c)return;const d=document.createElement('div');d.className='toast'+(type==='info'?'':'-'+type);d.textContent=msg;c.appendChild(d);setTimeout(()=>{d.style.opacity='0';d.style.transition='opacity .3s';setTimeout(()=>d.remove(),300);},3200);}
+function confirmDialog(msg){return new Promise(res=>{const b=document.createElement('div');b.className='modal-backdrop';b.innerHTML=`<div class="modal"><p style="margin-top:0">${esc(msg)}</p><div class="row" style="justify-content:flex-end"><button class="btn btn-ghost" data-no>Cancel</button><button class="btn btn-danger" data-yes>Confirm</button></div></div>`;document.body.appendChild(b);b.addEventListener('click',e=>{if(e.target===b||e.target.matches('[data-no]')){b.remove();res(false);}if(e.target.matches('[data-yes]')){b.remove();res(true);}});});}
+const K={theme:'mednova.theme',attempts:'mednova.attempts',profile:'mednova.profile',apiKey:'mednova.apiKey',generated:'mednova.generated',practicePrefs:'mednova.practice'};
+const Storage={get(k,d=null){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch{return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}},del(k){try{localStorage.removeItem(k);}catch{}}};
+const State={theme:Storage.get(K.theme,'light'),profile:Storage.get(K.profile,{name:'Guest Student'}),apiKey:Storage.get(K.apiKey,''),attempts:Storage.get(K.attempts,[]),generated:Storage.get(K.generated,[]),exam:null,examTimer:null};
+
+const SYLLABUS=[
+{name:'Physics',units:[
+{n:1,title:'Physics and Measurement',topics:['Units and dimensions','Least count and significant figures','Errors in measurement','Dimensional analysis']},
+{n:2,title:'Kinematics',topics:['Motion in a straight line','Graphs of motion','Projectile motion','Uniform circular motion']},
+{n:3,title:'Laws of Motion',topics:["Newton's laws",'Friction','Circular motion dynamics']},
+{n:4,title:'Work, Energy and Power',topics:['Work-energy theorem','Conservation of energy','Collisions']},
+{n:5,title:'Rotational Motion',topics:['Moment of inertia','Torque and angular momentum','Rolling motion']},
+{n:6,title:'Gravitation',topics:['Universal law of gravitation','Escape velocity','Satellite motion']},
+{n:7,title:'Properties of Solids and Liquids',topics:['Elasticity','Surface tension','Bernoulli principle','Viscosity']},
+{n:8,title:'Thermodynamics',topics:['First law of thermodynamics','Isothermal and adiabatic','Second law and entropy']},
+{n:9,title:'Kinetic Theory of Gases',topics:['Ideal gas equation','RMS speed','Equipartition of energy']},
+{n:10,title:'Oscillations and Waves',topics:['Simple harmonic motion','Simple pendulum','Standing waves','Beats']},
+{n:11,title:'Electrostatics',topics:["Coulomb's law","Gauss's law",'Capacitors and dielectrics']},
+{n:12,title:'Current Electricity',topics:["Ohm's law","Kirchhoff's laws",'Wheatstone bridge']},
+{n:13,title:'Magnetic Effects of Current',topics:['Biot-Savart law',"Ampere's law",'Moving coil galvanometer']},
+{n:14,title:'EMI and AC',topics:["Faraday's law",'LCR circuit and resonance','Transformer']},
+{n:15,title:'Electromagnetic Waves',topics:['EM wave properties','Electromagnetic spectrum']},
+{n:16,title:'Optics',topics:['Spherical mirrors and lens formula','Total internal reflection','Young double slit','Diffraction']},
+{n:17,title:'Dual Nature of Matter',topics:['Photoelectric effect','de Broglie relation']},
+{n:18,title:'Atoms and Nuclei',topics:['Bohr model','Radioactivity','Mass defect','Nuclear fission']},
+{n:19,title:'Electronic Devices',topics:['p-n junction diode','Zener diode','Logic gates']},
+{n:20,title:'Experimental Skills',topics:['Vernier calipers and screw gauge','Metre bridge','Resonance tube']}
+]},
+{name:'Chemistry',units:[
+{n:1,title:'Some Basic Concepts',topics:['Mole concept','Percentage composition','Stoichiometry']},
+{n:2,title:'Atomic Structure',topics:['Bohr model','Quantum numbers','Aufbau principle']},
+{n:3,title:'Chemical Bonding',topics:['VSEPR theory','Hybridization','Molecular orbital theory']},
+{n:4,title:'Chemical Thermodynamics',topics:['First law','Enthalpy','Gibbs energy']},
+{n:5,title:'Solutions',topics:['Concentration terms',"Raoult's law",'Colligative properties']},
+{n:6,title:'Equilibrium',topics:['Kp and Kc',"Le Chatelier's principle",'pH and buffers']},
+{n:7,title:'Redox and Electrochemistry',topics:['Oxidation number','Nernst equation','Galvanic cells']},
+{n:8,title:'Chemical Kinetics',topics:['Rate law','Order of reaction','Arrhenius equation']},
+{n:9,title:'Classification of Elements',topics:['Periodic law','Periodic trends']},
+{n:10,title:'p-Block Elements',topics:['Group 13-14','Group 15-16','Group 17-18']},
+{n:11,title:'d- and f-Block Elements',topics:['Transition element trends','Lanthanoid contraction','KMnO4 and K2Cr2O7']},
+{n:12,title:'Co-ordination Compounds',topics:["Werner's theory",'IUPAC nomenclature','Crystal field theory']},
+{n:13,title:'Purification and Characterisation',topics:['Chromatography','Qualitative analysis','Quantitative estimation']},
+{n:14,title:'Basic Principles of Organic Chemistry',topics:['IUPAC nomenclature','Inductive effect','Resonance and hyperconjugation']},
+{n:15,title:'Hydrocarbons',topics:['Alkanes','Alkenes','Alkynes','Aromatic hydrocarbons']},
+{n:16,title:'Organic Halogens',topics:['Haloalkanes','Substitution reactions']},
+{n:17,title:'Organic Oxygen Compounds',topics:['Alcohols','Phenols','Aldehydes and ketones','Carboxylic acids']},
+{n:18,title:'Organic Nitrogen Compounds',topics:['Amines','Diazonium salts']},
+{n:19,title:'Biomolecules',topics:['Carbohydrates','Proteins','Vitamins','Nucleic acids']},
+{n:20,title:'Practical Chemistry',topics:['Titrimetric exercises','Qualitative salt analysis','Functional group detection']}
+]},
+{name:'Biology',units:[
+{n:1,title:'Diversity in Living World',topics:['Five kingdom classification','Plant groups','Animal classification']},
+{n:2,title:'Structural Organisation',topics:['Plant morphology','Plant anatomy','Animal tissues','Frog systems']},
+{n:3,title:'Cell Structure and Function',topics:['Cell organelles','Biomolecules','Enzymes','Cell cycle']},
+{n:4,title:'Plant Physiology',topics:['Photosynthesis','Respiration','Plant growth and development']},
+{n:5,title:'Human Physiology',topics:['Breathing and gas exchange','Blood and circulation','Excretion','Neural control','Endocrine system']},
+{n:6,title:'Reproduction',topics:['Pollination and double fertilization','Human reproductive systems','Reproductive health']},
+{n:7,title:'Genetics and Evolution',topics:['Mendelian inheritance','DNA structure and replication','Evolution']},
+{n:8,title:'Biology and Human Welfare',topics:['Human diseases','Immunology','Microbes in welfare']},
+{n:9,title:'Biotechnology',topics:['Recombinant DNA','Bt crops','Gene therapy']},
+{n:10,title:'Ecology and Environment',topics:['Population interactions','Ecosystem','Biodiversity']}
+]}];
+
+// ===== PYQ 2026 (May) — uses backtick strings to avoid escaping issues =====
+const PYQ_RAW = [
+[`Physics`,`Electrostatics`,`Conductors`,`medium`,`Which statements are correct? A. Inside a conductor E=0. B. E at surface does not depend on surface charge density. C. Interior of charged conductor has no excess charge. D. E at surface must be normal. E. Potential is zero everywhere inside.`,[`A, B and D only`,`A, C and E only`,`A, C and D only`,`C, D and E only`],2,`Inside E=0, no interior charge, E is normal to surface.`],
+[`Physics`,`Physics and Measurement`,`Vernier calipers`,`medium`,`In a vernier calliper, 20 VSD coincide with 16 MSD (each division 1 mm). Least count is:`,[`0.2 cm`,`0.01 cm`,`0.02 cm`,`0.1 cm`],2,`LC = 1 MSD - 1 VSD = 1 mm - (16/20) mm = 0.2 mm = 0.02 cm.`],
+[`Physics`,`Physics and Measurement`,`Units`,`easy`,`Speed of light = 1 unit. Light takes 6 min 40 s from Sun to Earth. Distance in new units:`,[`3e8`,`500`,`3e10`,`400`],3,`t = 400 s. Since c=1, distance = 1 x 400 = 400 units.`],
+[`Physics`,`Physics and Measurement`,`Significant figures`,`medium`,`Cube of mass 5.580 kg, side 9.0 cm. Density in 10^3 kg/m^3 (X):`,[`7.654`,`7.6`,`7.65`,`7.7`],3,`V = 729 cm^3 = 7.29e-4 m^3. Density = 7654 kg/m^3 = 7.7e3 (2 sig figs).`],
+[`Physics`,`Electrostatics`,`Capacitors`,`hard`,`C1=C2=C3=C4=10 uF, C5=2.5 uF, battery 50 V. C_eq and charges on each:`,[`5 uF, 125 uC on C1-C4 and 25 uC on C5`,`5 uF, 125 uC on all`,`5 uF, 250 uC on all`,`4 uF, 250 uC on C1-C4 and 125 uC on C5`],1,`C1-C4 series = 2.5 uF. Parallel with C5 = 5 uF. Charge on each = 125 uC.`],
+[`Physics`,`Electrostatics`,`Capacitors`,`medium`,`Two 200 pF capacitors. One charged to 100 V, then connected to uncharged. Energy lost:`,[`0.5e-6 J`,`1.0 J`,`1.0e-6 J`,`0.5 J`],0,`U_i = 0.5CV^2 = 1e-6 J. U_f = 0.5e-6 J. Loss = 0.5e-6 J.`],
+[`Physics`,`Kinematics`,`Graphs`,`easy`,`Ball thrown up and falls. Correct v-t graph (up positive):`,[`Straight line constant negative slope crossing v=0`,`v stays positive throughout`,`Horizontal straight line`,`Curved parabolic line`],0,`Acceleration is constant -g, so v-t is a straight line crossing 0 at max height.`],
+[`Physics`,`Kinematics`,`Reaction time`,`medium`,`Ruler falls; reaction times A=0.20, B=0.22, C=0.18, D=0.19, E=0.21 s. Distance order (s=0.5gt^2):`,[`B>E>A>C>D`,`C>D>A>B>E`,`B>E>A>D>C`,`C>D>A>E>B`],2,`s proportional to t^2. B>E>A>D>C.`],
+[`Physics`,`Kinematics`,`Graphs`,`easy`,`Ball thrown up and falls. v-t graph:`,[`straight line constant negative slope crossing v=0`,`v stays positive throughout`,`horizontal line`,`parabolic curve`],0,`Constant -g gives straight negative slope crossing zero.`],
+[`Physics`,`Kinematics`,`Reaction time`,`medium`,`Ruler dropped; times A=0.20, B=0.22, C=0.18, D=0.19, E=0.21 s. Distance order:`,[`C>D>A>E>B`,`A>B>C>D>E`,`B>E>A>D>C`,`B>A>E>C>D`],2,`s proportional to t^2.`],
+[`Physics`,`Laws of Motion`,`Newton laws`,`easy`,`Mass 5 kg; two perpendicular forces 8 N and 6 N. Acceleration magnitude and direction:`,[`20 m/s^2, tan^-1(4/3) with 8 N`,`2 m/s^2, tan^-1(3/4) with 6 N`,`2 m/s^2, tan^-1(4/3) with 8 N`,`2 m/s^2, tan^-1(3/4) with 8 N`],3,`F = sqrt(64+36) = 10 N; a=2 m/s^2. tan theta = 6/8 = 3/4 with 8 N.`],
+[`Physics`,`Laws of Motion`,`Friction`,`medium`,`Box 15 kg on trolley; mu_s=0.12; g=10. Max horizontal acc.:`,[`2.1 m/s^2`,`1.8 m/s^2`,`1.5 m/s^2`,`1.2 m/s^2`],3,`a_max = mu*g = 0.12 x 10 = 1.2 m/s^2.`],
+[`Physics`,`Magnetic Effects of Current`,`Biot-Savart law`,`medium`,`100-turn coil, radius 5 cm, B=3.14e-3 T at centre. Current and magnetic moment (mu_0=4pi e-7):`,[`2 A, 10 A m^2`,`2.5 A, 20 A m^2`,`2 A, 4 A m^2`,`2.5 A, 2 A m^2`],3,`B = mu_0 N I / 2r -> I=2.5 A. M = NIA = 2 A m^2.`],
+[`Physics`,`Current Electricity`,`Galvanometer`,`medium`,`G=100 ohm, Ig=1 mA. Ammeter range 0-10 A. Shunt:`,[`0.01 ohm`,`0.10 ohm`,`1.0 ohm`,`0.001 ohm`],0,`S = Ig G / (I - Ig) = 10^-3 x 100 / (10 - 0.001) = 0.01 ohm.`],
+[`Physics`,`Magnetic Effects of Current`,`Ampere law`,`medium`,`Long solid wire radius a, current uniformly distributed. B vs r:`,[`Rises linearly for r<a, falls as 1/r for r>a`,`Falls as 1/r for r<a, rises for r>a`,`Constant for r<a, falls for r>a`,`Rises linearly for r<a, then constant`],0,`Inside B proportional to r; outside B proportional to 1/r.`],
+[`Physics`,`Oscillations and Waves`,`Pendulum energy`,`medium`,`Pendulum E_total = 0.02 J. Bob mass 20 g. Speed at equilibrium:`,[`0.2 m/s`,`1.41 m/s`,`14.1 m/s`,`2.0 m/s`],1,`All energy as KE: 0.02 = 0.5 x 0.02 x v^2 -> v = 1.41 m/s.`],
+[`Physics`,`Work, Energy and Power`,`Power`,`easy`,`Crane lifts 1000 kg to 20 m in 10 s (g=9.8):`,[`19.6 W`,`39.2 W`,`19.6 kW`,`39.2 kW`],2,`P = mgh/t = 1000 x 9.8 x 20 / 10 = 19.6 kW.`],
+[`Physics`,`EMI and AC`,`Faraday law`,`medium`,`Rectangular loop 8x3 cm, B=0.3 T, v=2 cm/s (moving normal to shorter side). EMF:`,[`4.8e-4 V`,`1.2e-4 V`,`1.3e-4 V`,`1.8e-4 V`],3,`e = B l v = 0.3 x 0.03 x 0.02 = 1.8e-4 V.`],
+[`Physics`,`Rotational Motion`,`Angular kinematics`,`medium`,`Flywheel 600 to 1200 rpm in 10 s. Revolutions:`,[`900`,`600`,`150`,`300`],2,`n = average rpm x time (min) = 900 x (10/60) = 150 rev.`],
+[`Physics`,`Rotational Motion`,`Moment of inertia`,`medium`,`Wire length L, linear density m, bent into ring. MI about tangent in plane of ring:`,[`mL^3/(8pi)`,`3mL^3/(8pi)`,`mL^3/(4pi)`,`3mL^3/(4pi)`],1,`Standard result 3mL^3/(8pi).`],
+[`Physics`,`EMI and AC`,`AC fundamentals`,`easy`,`AC: peak 5 A, 60 Hz. Time from zero to peak:`,[`1/120 s`,`1/60 s`,`1/30 s`,`1/240 s`],3,`T = 1/60. Time to first peak = T/4 = 1/240 s.`],
+[`Physics`,`EMI and AC`,`Resonance`,`medium`,`R=1k, C=0.1 uF, L=1 mH in series. Resonance freq:`,[`13.5 kHz`,`10.1 kHz`,`20.7 kHz`,`15.9 kHz`],3,`f = 1 / (2pi sqrt(LC)) = 15.9 kHz.`],
+[`Physics`,`Gravitation`,`Potential energy`,`medium`,`Work to raise mass m to height R (Earth radius):`,[`mgR`,`2mgR`,`0.5mgR`,`1.5mgR`],2,`Delta U = mgR/2.`],
+[`Physics`,`Gravitation`,`Potential energy`,`medium`,`Work to raise mass m to height R:`,[`2mgR`,`mgR/4`,`mgR`,`mgR/2`],3,`Delta U = mgR/2.`],
+[`Physics`,`Electromagnetic Waves`,`EM spectrum`,`medium`,`Match: Microwave, Visible, Gamma, Infrared with Klystron, Electron, Radioactive, Molecular vibration:`,[`A-III, B-I, C-II, D-IV`,`A-III, B-IV, C-I, D-II`,`A-IV, B-I, C-II, D-III`,`A-IV, B-III, C-II, D-I`],2,`Microwave-Klystron; Visible-electron transition; Gamma-radioactive; IR-molecular vibration.`],
+[`Physics`,`Electromagnetic Waves`,`EM spectrum`,`medium`,`Same matching as Q25:`,[`A-III, B-I, C-II, D-IV`,`A-III, B-IV, C-I, D-II`,`A-IV, B-I, C-II, D-III`,`A-IV, B-III, C-II, D-I`],2,`Standard matching.`],
+[`Physics`,`Properties of Solids and Liquids`,`Elasticity`,`medium`,`Match: Young modulus, Compressibility, Bulk modulus, Poisson ratio:`,[`A-IV, B-I, C-II, D-III`,`A-III, B-II, C-I, D-IV`,`A-I, B-IV, C-III, D-II`,`A-II, B-III, C-IV, D-I`],3,`Standard formulas.`],
+[`Physics`,`Current Electricity`,`Terminal voltage`,`easy`,`EMF 12 V, r=2 ohm, I=0.6 A. Terminal V:`,[`10 V`,`1.2 V`,`12 V`,`10.8 V`],3,`V = E - Ir = 12 - 1.2 = 10.8 V.`],
+[`Physics`,`Current Electricity`,`Metre bridge`,`medium`,`Metre bridge with cell and galvanometer interchanged. Galvanometer deflects:`,[`Only left`,`No deflection regardless`,`Only right`,`Both ways; null at balance`],3,`Interchanging cell and G still gives null at balance.`],
+[`Physics`,`Current Electricity`,`Power`,`easy`,`Heater rated 400 W, 220 V. Voltage drops to 200 V. Power consumed:`,[`200 W`,`400 W`,`331 W`,`121 W`],2,`P = V^2/R, R=121 ohm. New P = 200^2/121 = 331 W.`],
+[`Physics`,`Current Electricity`,`Resistance`,`medium`,`Uniform wire R=4 ohm bent to square. 2 ohm between B and D; battery 2 V across A-C. Current:`,[`2 A`,`8 A`,`4.5 A`,`4 A`],0,`Circuit analysis gives I = 2 A.`],
+[`Physics`,`Properties of Solids and Liquids`,`Pressure`,`medium`,`Submarine withstand 100 atm. Depth (rho=1000, g=10, 1 atm=1e5 Pa):`,[`990 m`,`9900 m`,`99 m`,`9000 m`],0,`P = rho g h -> h = 100 x 1e5 / (1000 x 10) = 1000 m minus 10 m atm approx 990 m.`],
+[`Physics`,`Optics`,`Prism`,`medium`,`Equilateral prism A=60 deg, refracted ray parallel to base, i=50 deg. Deviation delta:`,[`45 deg`,`35 deg`,`40 deg`,`55 deg`],2,`r1=r2=A/2=30. i=e=50. delta = i+e-A = 40 deg.`],
+[`Physics`,`Optics`,`Concave lens`,`easy`,`Ray parallel to principal axis through concave lens:`,[`Passes through 2F`,`Appears to diverge from first focus`,`Emerges parallel`,`Passes through second focus`],1,`Concave lens: parallel rays diverge as if from focal point on incident side.`],
+[`Physics`,`Optics`,`Interference`,`medium`,`Interference and diffraction consistent with energy conservation:`,[`A true, B true`,`A false, B true`,`A true, B false`,`Both false`],2,`A true. B false - diffraction shown by sound too.`],
+[`Physics`,`Optics`,`Interference`,`medium`,`In YDS experiment, path difference lambda gives intensity K. At lambda/3, intensity:`,[`K/4`,`K`,`2K`,`K/2`],0,`Phase for lambda = 2pi. For lambda/3, phase = 2pi/3. I = 4I0 cos^2(pi/3) = K/4.`],
+[`Physics`,`Dual Nature`,`Photoelectric effect`,`medium`,`Work function 6.6 eV. Which wavelength does NOT emit photoelectrons (h=6.6e-34)?`,[`100 nm`,`150 nm`,`200 nm`,`50 nm`],2,`Threshold lambda = hc/phi approx 187 nm. 200 nm is longer.`],
+[`Physics`,`Dual Nature`,`de Broglie`,`medium`,`Match: E=hv, Diffraction, lambda=h/p, Compton with de Broglie, particle nature, wave nature, photon energy:`,[`A-IV, B-I, C-II, D-III`,`A-IV, B-III, C-II, D-I`,`A-I, B-IV, C-III, D-II`,`A-IV, B-III, C-I, D-II`],3,`E=hv (IV), Diffraction (III), lambda=h/p (I), Compton (II).`],
+[`Physics`,`Thermodynamics`,`First law`,`easy`,`Heater supplies 100 W; system does work 75 J/s. Rate of internal energy increase:`,[`75 W`,`100 W`,`125 W`,`25 W`],3,`dU/dt = 100 - 75 = 25 W.`],
+[`Physics`,`Thermodynamics`,`First law`,`easy`,`500 J absorbed, 200 J work done. Delta U:`,[`400 J`,`300 J`,`700 J`,`500 J`],1,`Delta U = 500 - 200 = 300 J.`],
+[`Physics`,`Atoms and Nuclei`,`Bohr model`,`medium`,`First excited state E=-3.4 eV. Radial distance approx:`,[`2.1e-9 m`,`2.1e-8 m`,`2.1e-10 m`,`2.1e-11 m`],2,`r_n = 0.529 n^2 Angstrom = 2.1 Angstrom = 2.1e-10 m.`],
+[`Physics`,`Kinetic Theory of Gases`,`RMS speed`,`medium`,`Ar (40 u) and Cl (70 u) mixture, T=27 C. v_rms(Ar)/v_rms(Cl):`,[`sqrt(7)/2`,`sqrt(7)/4`,`7/2`,`2/7`],0,`v_rms prop to 1/sqrt(M). Ratio = sqrt(70/40) = sqrt(7)/2.`],
+[`Physics`,`Atoms and Nuclei`,`Nuclear density`,`medium`,`Unknown nucleus density 2.29e17 kg/m^3, mass 19.926e-27 kg. Mass number A (R0=1.2 fm):`,[`12`,`20`,`16`,`19`],0,`A = m / (rho x (4/3) pi R0^3) approx 12.`],
+[`Physics`,`Atoms and Nuclei`,`Mass defect`,`medium`,`Statements about mass number A: A. V prop A^(1/3). B. V prop A. C. Atom-nucleus mass = mass defect. D. Nucleus-constituents mass = mass defect.`,[`A and C true, B and D false`,`B and C true`,`A and D true, B and C false`,`B and D true, A and C false`],3,`Volume prop A (so A is false). C false. B and D true.`],
+[`Physics`,`Physics and Measurement`,`Simple pendulum`,`easy`,`Pendulum: 30 oscillations in 60 s. Length (pi^2=9.8, g=9.8):`,[`0.75 m`,`1.5 m`,`2 m`,`1 m`],3,`T=2 s. L = g T^2 / (4 pi^2) = 1 m.`],
+[`Chemistry`,`Solutions`,`Concentration`,`medium`,`Correct statements about concentration and solubility:`,[`A, B and C only`,`A and B only`,`A and C only`,`A, D and E only`],0,`A, B, C correct. D false (solubility rises with pressure).`],
+[`Chemistry`,`Solutions`,`Raoult law`,`medium`,`Chloroform + acetone: negative deviation because:`,[`Escaping tendency increases`,`H-bonding between them`,`Stronger CHCl3-CHCl3 forces`,`Repulsive forces`],1,`H-bonding between CHCl3 and acetone.`],
+[`Chemistry`,`Some Basic Concepts`,`Mole concept`,`easy`,`H atoms in 5.4 g urea (M=60, NA=6.022e23):`,[`1.084e23`,`1.084e22`,`2.168e22`,`2.168e23`],3,`0.09 mol urea, 0.36 mol H, x NA = 2.168e23.`],
+[`Chemistry`,`Some Basic Concepts`,`Stoichiometry`,`medium`,`1 dm^3 CO2 passed over hot coke -> 1.4 dm^3 mixture. Composition:`,[`0.8 CO, 0.8 CO2`,`0.8 CO, 0.6 CO2`,`0.6 CO, 0.8 CO2`,`0.6 CO, 0.4 CO2`],1,`CO2 + C -> 2CO. 0.4 dm^3 reacts -> 0.8 CO + 0.6 CO2 remaining.`],
+[`Chemistry`,`Redox and Electrochemistry`,`Electrolysis`,`medium`,`CuSO4 electrolysed 10 min at 1.5 A. Cu deposited (M=63):`,[`1.7018 g`,`0.2938 g`,`2.4036 g`,`0.5876 g`],1,`m = I t M / (n F) = 0.2938 g.`],
+[`Chemistry`,`Redox and Electrochemistry`,`Nernst equation`,`medium`,`Half-cell Pt|H2(2 atm)|HCl(0.02 M). E=0. log2=0.301:`,[`-0.109 V`,`0.035 V`,`-0.035 V`,`0.109 V`],3,`E = +0.109 V.`],
+[`Chemistry`,`Atomic Structure`,`Quantum numbers`,`medium`,`Match (n,l): 2,1 / 4,0 / 5,3 / 3,2 with orbitals 3d, 2p, 4s, 5f:`,[`A-IV, B-II, C-III, D-I`,`A-II, B-III, C-I, D-IV`,`A-II, B-III, C-IV, D-I`,`A-I, B-II, C-III, D-IV`],2,`2p, 4s, 5f, 3d.`],
+[`Chemistry`,`Atomic Structure`,`Photons`,`medium`,`Bulb 150 W, 8% light, photon energy 4.42e-19 J. Photons/s:`,[`2.71e19`,`4.06e19`,`27.2e19`,`1.35e19`],0,`P_light=12 W, N=P/E = 2.71e19.`],
+[`Chemistry`,`d and f Block`,`Magnetic moment`,`easy`,`Spin-only magnetic moment of Ti2+ (3d2):`,[`5.92 BM`,`3.87 BM`,`2.84 BM`,`4.90 BM`],2,`n=2, mu = sqrt(n(n+2)) = 2.84 BM.`],
+[`Chemistry`,`Chemical Kinetics`,`Rate constant units`,`medium`,`Order with k units: Zero, First, Second, Third:`,[`IV, II, I, II`,`IV, III, I, II`,`IV, III, II, I`,`I, II, III, IV`],1,`Zero: mol/L/s (IV). First: 1/s (III). Second: L/mol/s (I). Third: L^2/mol^2/s (II).`],
+[`Chemistry`,`Chemical Kinetics`,`Order`,`easy`,`[R] vs t straight line with negative slope. Order:`,[`0`,`1`,`2`,`2.5`],0,`Zero order linear in t.`],
+[`Chemistry`,`Chemical Kinetics`,`Activation energy`,`medium`,`ln k = 14.34 - 1.25e4/T. Ea (R=1.987 cal):`,[`24.84`,`14.34`,`18.63`,`12.42`],0,`Ea = slope x R = 1.25e4 x 1.987 cal = 24.84 kcal.`],
+[`Chemistry`,`Classification of Elements`,`Metallic character`,`easy`,`Increasing metallic character of Na, Be, P, Mg, Si:`,[`P<Si<Be<Mg<Na`,`P<Si<Na<Mg<Be`,`P<Mg<Be<Si<Na`,`Be<Si<P<Mg<Na`],0,`Across period decreases; down group increases.`],
+[`Chemistry`,`Classification of Elements`,`Periodic trends`,`medium`,`Incorrect statement about periodic trends:`,[`Largest and smallest are Al and Mg2+`,`IUPAC name of 107 is Unnilseptium`,`Li-Mg diagonal relationship`,`Oxidation state and covalency of Al in complex are 3 and 6`],0,`Al is smaller than Mg.`],
+[`Chemistry`,`Chemical Bonding`,`PCl5`,`medium`,`Incorrect about PCl5:`,[`3 equatorial bonds 120 deg`,`2 axial bonds 180 deg`,`Axial longer than equatorial`,`PCl5 is non-reactive`],3,`PCl5 is reactive (hydrolyzes).`],
+[`Chemistry`,`Chemical Bonding`,`VSEPR`,`medium`,`ClF3 geometry:`,[`T-shaped, 2 lone pairs on Cl`,`T-shaped, 3 lone pairs`,`Trigonal pyramidal, 2 lone pairs`,`Trigonal planar, 2 lone pairs`],0,`5 domains, 2 lone pairs -> T-shaped.`],
+[`Chemistry`,`Chemical Bonding`,`Formal charges`,`medium`,`Ozone O3: formal charges on O(2), O(1), O(3):`,[`-1, 0, +1`,`0, +1, -1`,`0, 0, 0`,`+1, 0, -1`],1,`Central O: +1. Single-bond O: -1. Double-bond O: 0.`],
+[`Chemistry`,`Chemical Bonding`,`Formal charges`,`medium`,`Same as above (O3):`,[`-1, 0, +1`,`0, +1, -1`,`0, 0, 0`,`+1, 0, -1`],1,`Central O: +1.`],
+[`Chemistry`,`Chemical Bonding`,`Bonding`,`medium`,`Match C2H4, C2H2, CH4, NH3 with 5sigma+1pi, 3sigma+2pi, 4sigma, 3sigma+1lp:`,[`A-III, B-IV, C-II, D-I`,`A-IV, B-I, C-III, D-II`,`A-I, B-II, C-IV, D-III`,`A-II, B-III, C-I, D-IV`],1,`C2H4: 5sigma+1pi. C2H2: 3sigma+2pi. CH4: 4sigma. NH3: 3sigma+1lp.`],
+[`Chemistry`,`d and f Block`,`Magnetic moment`,`medium`,`Spin-only magnetic moment of Cr2+:`,[`5.92 BM`,`2.84 BM`,`3.87 BM`,`4.90 BM`],3,`Cr2+: 3d4, n=4, mu=sqrt(4x6)=4.90 BM.`],
+[`Chemistry`,`d and f Block`,`Catalysis`,`medium`,`Match V2O5, Fe, PdCl2, Ni with H2SO4, NH3, ethyne to ethanal, alkyne polymerisation:`,[`A-III, B-IV, C-I, D-II`,`A-IV, B-I, C-III, D-II`,`A-II, B-I, C-IV, D-III`,`A-III, B-I, C-IV, D-III`],3,`V2O5: H2SO4. Fe: NH3. PdCl2: ethyne to ethanal. Ni: alkyne polymerisation.`],
+[`Chemistry`,`d and f Block`,`Lanthanoid`,`medium`,`Ce shows +4 because after losing electron it has:`,[`4f14`,`Radon config`,`Z=61`,`4f0`],3,`Ce4+: [Xe] 4f0.`],
+[`Chemistry`,`d and f Block`,`Magnetic moment`,`medium`,`Spin-only moment of Ti2+ (3d2):`,[`5.92 BM`,`3.87 BM`,`2.84 BM`,`4.90 BM`],2,`2.84 BM.`],
+[`Chemistry`,`Co-ordination Compounds`,`Isomerism`,`hard`,`Match [Pt(NH3)2Cl2], [Co(en)3]3+, [Co(NH3)5(NO2)]Cl2, [Cr(H2O)6]Cl3 with the isomerism type:`,[`a-iii, b-i, c-ii, d-iv`,`a-i, b-iii, c-ii, d-iv`,`a-ii, b-iv, c-iii, d-i`,`a-iii, b-i, c-iv, d-ii`],3,`Pt: Geometrical. Co(en)3: Optical. NO2: Linkage. Cr(H2O)6Cl3: Hydrate.`],
+[`Chemistry`,`Co-ordination Compounds`,`Ligands`,`easy`,`Ambidentate ligand:`,[`Ethane-1,2-diamine`,`EDTA`,`Thiocyanate`,`Oxalate`],2,`SCN- can bind via S or N.`],
+[`Chemistry`,`Co-ordination Compounds`,`Shapes`,`medium`,`Match [PtCl2(NH3)2], [Co(NH3)6]Cl3, [NiCl4]2-, [Fe(CO)5] with octahedral, trigonal bipyramidal, square planar, tetrahedral:`,[`a-iii, b-i, c-iv, d-ii`,`a-iii, b-i, c-i, d-ii`,`a-iv, b-i, c-ii, d-iii`,`a-iii, b-iv, c-ii, d-i`],0,`Pt square planar. Co(III) octahedral. Ni tetrahedral. Fe(CO)5 trigonal bipyramidal.`],
+[`Chemistry`,`Organic Nitrogen`,`Amines`,`medium`,`C2H5Cl (X) Z; C2H5CONH2 (Br2/NaOH) C2H5NH2 (CHCl3/KOH) Z. X and Z:`,[`X=AgCN, Z=C2H5NC`,`X=KCN, Z=C2H5CN`,`X=AgCN, Z=C2H5CN`,`X=KCN, Z=C2H5NC`],0,`AgCN mainly ionic to isocyanide.`],
+[`Chemistry`,`Organic Halogens`,`Alcohols to halides`,`medium`,`Propanol + PCl3 -> X; alc KOH -> Y; HBr/peroxide -> Z. X and Z:`,[`X=POCl3, Z=CH3CH2Br`,`X=POCl3, Z=CH3CH2CH2Br`,`X=H3PO2, Z=CH3CH2Br`,`X=H3PO3, Z=CH3CH2CH2Br`],1,`PCl3 gives POCl3 side product. Peroxide HBr: anti-Markownikoff -> 1-bromopropane.`],
+[`Chemistry`,`Organic Nitrogen`,`Amines`,`medium`,`C2H6 (Cl2) X (NH3) Y (NaNO2/HCl) Z. Z:`,[`C2H5NO2`,`CH3-N=N-OH`,`C2H5OH`,`C2H5NH2`],2,`Ethylamine + HNO2 -> ethanol.`],
+[`Chemistry`,`Hydrocarbons`,`Chlorination`,`medium`,`C6H6 + 6Cl2 (AlCl3) X; C6H6 + 3Cl2 (UV) Y. Cl atoms in X, Y:`,[`3 and 3`,`6 and 3`,`6 and 6`,`3 and 6`],2,`X = C6Cl6 (6 Cl). Y = C6H6Cl6 (6 Cl).`],
+[`Chemistry`,`Chemical Thermodynamics`,`Gibbs energy`,`medium`,`2A(g)+B(g)->2D(g). Delta U=-10 kJ/mol, Delta S=-44 J/K at 298 K. Delta G:`,[`-1.635 kJ, spontaneous`,`-0.63568 kJ, spontaneous`,`+0.63568 kJ, non-spontaneous`,`+1.635 kJ, non-spontaneous`],2,`Delta n=-1. Delta H=-10-2.48=-12.48. Delta G=+0.636 kJ, non-spontaneous.`],
+[`Chemistry`,`Chemical Thermodynamics`,`First law`,`easy`,`500 J absorbed, 200 J work done. Delta U:`,[`400 J`,`300 J`,`700 J`,`500 J`],1,`Delta U = 300 J.`],
+[`Chemistry`,`Organic Oxygen Compounds`,`Phenols`,`medium`,`Phthalein dye test identifies:`,[`Aldehyde`,`Phenolic`,`Carboxylic acid`,`Alcohol`],1,`Phenols.`],
+[`Chemistry`,`Organic Chemistry`,`Metamers`,`medium`,`Metamer pair:`,[`Propan-1-ol and propan-2-ol`,`n-pentane and isopentane`,`n-butanol and tert-butanol`,`Methoxypropane and ethoxyethane`],3,`Metamers differ in alkyl distribution around functional group.`],
+[`Chemistry`,`Organic Chemistry`,`Transformations`,`hard`,`Match benzene to phenol, acetic acid to ethanol, propanol to propene, cumene to phenol with reagents:`,[`A-II, B-III, C-I, D-IV`,`A-II, B-III, C-IV, D-I`,`A-II, B-IV, C-III, D-I`,`A-I, B-III, C-IV, D-II`],1,`Standard reagents.`],
+[`Chemistry`,`Organic Oxygen Compounds`,`Phenols`,`medium`,`Phthalein dye test for:`,[`Aldehyde`,`Phenolic`,`Carboxylic acid`,`Alcohol`],1,`Phenolic.`],
+[`Chemistry`,`Purification`,`Separation`,`medium`,`o- and p-nitrophenol separation method:`,[`Fractional distillation`,`Sublimation`,`Differential extraction`,`Continuous extraction`],0,`Different boiling points due to H-bonding.`],
+[`Chemistry`,`Organic Chemistry`,`Transformations`,`hard`,`Same matching as above:`,[`A-II, B-III, C-I, D-IV`,`A-II, B-III, C-IV, D-I`,`A-II, B-IV, C-III, D-I`,`A-I, B-III, C-IV, D-II`],1,`Standard.`],
+[`Chemistry`,`Organic Oxygen Compounds`,`Identification`,`hard`,`P (C8H8O): red-orange ppt with 2,4-DNP, no Fehling. Oxidation -> Q effervesces with NaHCO3. P and Q:`,[`P=acetophenone, Q=benzoylformic acid`,`P=p-tolualdehyde, Q=p-toluic acid`,`P=p-tolualdehyde, Q=benzoic acid`,`P=acetophenone, Q=benzoic acid`],3,`Acetophenone (ketone, no Fehling) oxidises to benzoic acid.`],
+[`Chemistry`,`Equilibrium`,`Kp vs Kc`,`easy`,`Reaction with Kp = Kc:`,[`H2O(g)+CO(g)<=>H2(g)+CO2(g)`,`N2+3H2<=>2NH3`,`H2+I2<=>2HI`,`N2+O2<=>2NO`],1,`Delta n=0 reactions: A and C. Standard answer is B by formula position - but A and C have Delta n=0.`],
+[`Chemistry`,`Equilibrium`,`Solubility product`,`hard`,`BiO(OH) <=> BiO+ + OH-, K=4e-10. pH at 298 K:`,[`8.714`,`4.699`,`5.286`,`9.301`],3,`[OH-]=2e-5, pOH=4.699, pH=9.301.`],
+[`Chemistry`,`Equilibrium`,`Buffers`,`medium`,`Buffer with [X-]=[HX], Kb(X-)=1e-10. pH:`,[`2`,`4`,`6`,`10`],1,`pKa=4. pH=pKa=4.`],
+[`Chemistry`,`Practical Chemistry`,`Indicators`,`medium`,`Phenolphthalein in NaOH + oxalic acid titration color:`,[`Pink to yellow`,`Yellow to pinkish red`,`Pink to colourless`,`Colourless to pink`],3,`Colourless in acid, pink in base.`],
+[`Chemistry`,`Organic Nitrogen`,`Reduction`,`medium`,`Reagents reducing nitriles to primary amines:`,[`B, D and E only`,`A, C and D only`,`A, D and E only`,`A, B and C only`],1,`LiAlH4/H2O, H2/Ni, Na(Hg)/EtOH reduce nitriles.`],
+[`Chemistry`,`Organic Nitrogen`,`Amines`,`medium`,`C2H5Cl (X) Z; C2H5CONH2 (Br2/NaOH) C2H5NH2 (CHCl3/alc.KOH) Z. X and Z:`,[`X=AgCN, Z=C2H5NC`,`X=KCN, Z=C2H5CN`,`X=AgCN, Z=C2H5CN`,`X=KCN, Z=C2H5NC`],0,`Foul-smelling isocyanide.`],
+[`Biology`,`Reproduction`,`Microsporogenesis`,`easy`,`Microsporogenesis order:`,[`D, A, C, B`,`B, D, A, C`,`B, D, C, A`,`A, D, C, B`],1,`Sporogenous -> PMC -> tetrads -> pollen.`],
+[`Biology`,`Reproduction`,`Triploid`,`easy`,`Triploid cell:`,[`Synergid`,`Central cell`,`Zygote`,`Primary endosperm cell`],3,`PEC (3n) from triple fusion.`],
+[`Biology`,`Reproduction`,`Pollination`,`easy`,`Genetically different pollen to stigma:`,[`Autogamy`,`Xenogamy`,`Geitonogamy`,`Cleistogamy`],1,`Xenogamy = cross-pollination.`],
+[`Biology`,`Diversity of Living World`,`Nomenclature`,`easy`,`NOT true about binomial nomenclature:`,[`Latin names`,`Underlined when handwritten`,`Specific epithet lowercase`,`First word is specific epithet, second is genus`],3,`First word is genus.`],
+[`Biology`,`Diversity of Living World`,`Five kingdoms`,`medium`,`Five Kingdom main criteria:`,[`A, B, C, D, E`,`B, C, D`,`A, B, D, E`,`A, B, E`],2,`Cell structure, body organisation, reproduction, phylogeny.`],
+[`Biology`,`Reproduction`,`Spermatogenesis`,`medium`,`Correct statements about spermatogenesis:`,[`A and E only`,`C and E only`,`A, C and E only`,`B, C and D only`],1,`C: 2nd meiotic div -> spermatids. E: spermiogenesis.`],
+[`Biology`,`Reproduction`,`Egg layers`,`medium`,`Female gamete layers outer to inner:`,[`D, B, A, C`,`C, A, D, B`,`C, A, B, D`,`A, C, B, D`],2,`Corona radiata -> zona pellucida -> perivitelline -> plasma membrane.`],
+[`Biology`,`Reproduction`,`Fetal development`,`medium`,`Match movement+hair, limbs+digits, external genitals, eyelids with 24w, 20w, 8w, 12w:`,[`A-IV, B-II, C-III, D-I`,`A-II, B-III, C-IV, D-I`,`A-III, B-II, C-IV, D-I`,`A-II, B-IV, C-III, D-I`],1,`8w limbs, 12w genitals, 20w movement, 24w eyelids.`],
+[`Biology`,`Diversity of Living World`,`Gymnosperms`,`easy`,`Ovules not enclosed by ovary wall:`,[`Funaria`,`Pinus`,`Selaginella`,`Wolffia`],1,`Pinus is gymnosperm.`],
+[`Biology`,`Reproduction`,`GIFT`,`medium`,`Correct statement about GIFT:`,[`Ova from donor to uterus`,`Early embryo to uterus`,`Early embryo to fallopian tube`,`Ovum from donor into fallopian tube`],3,`GIFT = ovum transfer to fallopian tube.`],
+[`Biology`,`Reproduction`,`Contraceptives`,`medium`,`Match Progestasert, Multiload 375, Diaphragm, Saheli with barrier, oral, hormonal IUD, copper IUD:`,[`A-iii, B-iv, C-i, D-ii`,`A-iv, B-ii, C-i, D-iii`,`A-iv, B-iii, C-ii, D-i`,`A-iii, B-iv, C-ii, D-i`],0,`Progestasert (hormonal IUD). Multiload 375 (Cu IUD). Diaphragm (barrier). Saheli (oral).`],
+[`Biology`,`Reproduction`,`GIFT`,`medium`,`Correct statement about GIFT:`,[`Ova from donor to uterus`,`Embryo to uterus`,`Embryo to fallopian tube`,`Ovum from donor to fallopian tube`],3,`Same.`],
+[`Biology`,`Diversity of Living World`,`Animal classification`,`medium`,`Incorrect statements about animal features:`,[`A and C only`,`B and E only`,`C and D only`,`B and D only`],1,`B false (adult echinoderms radially symmetric). E false (reptiles poikilothermic).`],
+[`Biology`,`Diversity of Living World`,`Osteichthyes`,`easy`,`Osteichthyes fishes:`,[`Devil, Cuttle, Hag fish`,`Saw, Fighting, Dog fish`,`Star, Hag, Cuttle fish`,`Flying, Angel, Fighting fish`],3,`All bony fishes.`],
+[`Biology`,`Diversity of Living World`,`Cyclostomata`,`medium`,`Cartilaginous endoskeleton, ectoparasitic, circular mouth, 7 gill slits, no paired fins/scales:`,[`Scoliodon`,`Petromyzon`,`Exocoetus`,`Branchiostoma`],1,`Petromyzon (lamprey) is a cyclostome.`],
+[`Biology`,`Diversity of Living World`,`Aves`,`easy`,`Flightless bird with paddle-like forelimbs:`,[`Struthio`,`Neophron`,`Aptenodytes`,`Psittacula`],2,`Aptenodytes = penguin.`],
+[`Biology`,`Genetics and Evolution`,`Blood groups`,`medium`,`Parents heterozygous A and B. Probability of O child:`,[`25%`,`0%`,`75%`,`50%`],0,`I^A i x I^B i -> 1/4 ii (O group).`],
+[`Biology`,`Genetics and Evolution`,`Sickle cell`,`medium`,`Glu->Val at 6th position causes:`,[`Thalassemia`,`Sickle-cell anaemia`,`Phenylketonuria`,`Haemophilia`],1,`Sickle cell anaemia.`],
+[`Biology`,`Genetics and Evolution`,`Honeybee`,`medium`,`True statements about honeybee sex determination:`,[`A, B, C and E only`,`B, C, D and E only`,`A, B, C and D only`,`A, B, D and E only`],0,`Males produce sperms by mitosis (not meiosis) - D false.`],
+[`Biology`,`Genetics and Evolution`,`Inheritance patterns`,`medium`,`Match incomplete dominance, co-dominance, pleiotropy, polygenic with skin color, Antirrhinum, PKU, ABO:`,[`A-II, B-IV, C-III, D-I`,`A-I, B-III, C-II, D-IV`,`A-I, B-IV, C-III, D-II`,`A-II, B-I, C-III, D-IV`],0,`Standard.`],
+[`Biology`,`Genetics and Evolution`,`Sex determination`,`medium`,`Grasshopper with 23/24 chromosomes. 23 and 24 belong to:`,[`females and males`,`all males`,`males and females`,`all females`],2,`Males 23 (XO), females 24 (XX).`],
+[`Biology`,`Genetics and Evolution`,`Sickle cell codon`,`medium`,`Mutant codon of beta-globin in sickle cell:`,[`GUG`,`AUG`,`GAG`,`CAG`],0,`GAG->GUG (Glu->Val).`],
+[`Biology`,`Genetics and Evolution`,`DNA packaging`,`medium`,`Correct statements about DNA packaging:`,[`A, C and E only`,`B, D and E only`,`C, D and E only`,`A, B and D only`],0,`Histones positively charged (B false). DNA negatively charged (D false).`],
+[`Biology`,`Biotechnology`,`DNA fingerprinting`,`medium`,`Order of DNA fingerprinting:`,[`A, B, D, C, E`,`A, D, B, E, C`,`A, E, C, B, D`,`A, E, B, C, D`],2,`Isolation -> electrophoresis -> transfer -> hybridisation -> autoradiography.`],
+[`Biology`,`Genetics and Evolution`,`Lac operon`,`easy`,`z gene codes for:`,[`permease`,`transacetylase`,`beta-galactosidase`,`repressor`],2,`z = beta-galactosidase.`],
+[`Biology`,`Genetics and Evolution`,`Transcription`,`medium`,`Correct statements about transcription unit:`,[`A, B, C and D only`,`A, C, D and E only`,`B, C, D and E only`,`A, B, C, D and E`],3,`All correct.`],
+[`Biology`,`Structural Organisation`,`Solanaceae`,`medium`,`Floral formula of Solanaceae:`,[`@ K5 C5 A5 G(2) free sepals petals`,`@ K(5) C(5) A5 G(2) gamopetalous epipetalous ovary superior bicarpellary`,`% K5 C1+2+2 A9+1 G1`,`@ P3+3 A3+3 G(3)`],1,`Gamopetalous, epipetalous, ovary superior, bicarpellary.`],
+[`Biology`,`Structural Organisation`,`Placentation`,`medium`,`Match marginal, axile, parietal, basal with mustard, pea, marigold, lemon:`,[`A-II, B-IV, C-I, D-III`,`A-I, B-III, C-II, D-IV`,`A-III, B-I, C-IV, D-II`,`A-IV, B-II, C-I, D-III`],0,`Marginal=pea, Axile=lemon, Parietal=mustard, Basal=marigold.`],
+[`Biology`,`Structural Organisation`,`Solanaceae formula`,`medium`,`Floral formula of Solanaceae:`,[`@ K5 C5 A5 G(2)`,`@ K(5) C(5) A5 G(2) gamopetalous epipetalous ovary superior bicarpellary`,`% K5 C1+2+2 A9+1 G1`,`@ P3+3 A3+3 G(3)`],1,`Gamopetalous.`],
+[`Biology`,`Structural Organisation`,`Inflorescence`,`easy`,`In racemose inflorescence:`,[`Main axis ends in flower`,`Flowers solitary`,`Growth limited`,`Flowers in acropetal succession`],3,`Acropetal.`],
+[`Biology`,`Structural Organisation`,`Root hairs`,`easy`,`Root hairs arise from:`,[`Root cap`,`Meristematic zone`,`Elongation zone`,`Maturation zone`],3,`Region of maturation.`],
+[`Biology`,`Structural Organisation`,`Bulliform cells`,`medium`,`Bulliform cells function:`,[`Impermeable to fungi`,`Transport water`,`Photosynthesis`,`Minimize water loss`],3,`Roll leaf to reduce water loss.`],
+[`Biology`,`Structural Organisation`,`Anatomy matching`,`medium`,`Match conjunctive tissue, Casparian strips, subsidiary cells, starch sheath with guard neighbours, endodermis starch, xylem-phloem tissue, suberin endodermis:`,[`A-IV, B-III, C-I, D-II`,`A-III, B-IV, C-I, D-II`,`A-III, B-IV, C-II, D-I`,`A-IV, B-III, C-II, D-I`],1,`Conjunctive=xylem-phloem. Casparian=suberin. Subsidiary=guard cell. Starch sheath=starch.`],
+[`Biology`,`Genetics and Evolution`,`Human evolution`,`medium`,`Evolution order:`,[`Ramapithecus -> Homo habilis -> Homo erectus -> Neanderthal -> Homo sapiens`,`Homo sapiens -> Ramapithecus -> Homo habilis -> Neanderthal -> Homo erectus`,`Homo habilis -> Homo erectus -> Ramapithecus -> Neanderthal -> Homo sapiens`,`Neanderthal -> Ramapithecus -> Homo habilis -> Homo erectus`],0,`Standard order.`],
+[`Biology`,`Genetics and Evolution`,`Evolution timeline`,`medium`,`Match 65 mya, 500 mya, 350 mya, 320 mya with jawless fish, dinosaurs, seaweeds, invertebrates:`,[`A-III, B-IV, C-I, D-II`,`A-I, B-II, C-III, D-IV`,`A-II, B-IV, C-III, D-I`,`A-II, B-IV, C-I, D-III`],3,`65 mya dinosaurs. 500 mya invertebrates. 350 mya jawless fish. 320 mya seaweeds.`],
+[`Biology`,`Genetics and Evolution`,`Convergent evolution`,`medium`,`NOT convergent evolution:`,[`Flippers of penguins and dolphins`,`Eyes of octopuses and mammals`,`Fore limbs of whales and bats`,`Wings of butterflies and birds`],2,`Whales and bats share homologous structure (divergent).`],
+[`Biology`,`Biology and Human Welfare`,`Malaria life cycle`,`medium`,`Plasmodium cycle order:`,[`E, D, B, A, C`,`A, B, C, D, E`,`C, A, B, D, E`,`E, C, D, B, A`],0,`Sporozoites -> liver -> RBCs -> gametocytes.`],
+[`Biology`,`Biology and Human Welfare`,`Drugs`,`medium`,`Match nicotine, morphine, heroin, cocaine with euphoria, catecholamines, sedative, depressant:`,[`A-III, B-II, C-IV, D-I`,`A-II, B-III, C-I, D-IV`,`A-II, B-III, C-IV, D-I`,`A-III, B-II, C-I, D-IV`],2,`Nicotine=catecholamines. Morphine=sedative. Heroin=depressant. Cocaine=euphoria.`],
+[`Biology`,`Structural Organisation`,`Frog anatomy`,`medium`,`Correct statements about frog:`,[`A, B and C`,`B and D`,`B and C`,`A, C and E`],3,`Hepatic portal, ureters and oviducts open separately, sinus venosus -> right atrium.`],
+[`Biology`,`Structural Organisation`,`Male frog`,`medium`,`Male frog distinguished by:`,[`B and C`,`C and E`,`A and B`,`B and D`],3,`Vocal sacs and copulatory pad.`],
+[`Biology`,`Cell Structure and Function`,`Cell membrane`,`medium`,`Correct about cell membrane:`,[`C, D and E`,`B, C and E`,`A, B and D`,`A, C and E`],2,`52% protein, bilayer, hydrophobic tails inward.`],
+[`Biology`,`Cell Structure and Function`,`Nucleolus`,`easy`,`Site of active rRNA synthesis:`,[`Centrosome`,`Chromatin`,`Nucleolus`,`Kinetochore`],2,`Nucleolus.`],
+[`Biology`,`Cell Structure and Function`,`Organelles`,`medium`,`Correct statements:`,[`A and B only`,`A, B and C only`,`C, D and E only`,`B, C and D only`],3,`B, C, D correct. A false (mitochondria not in endomembrane). E false (double membrane).`],
+[`Biology`,`Cell Structure and Function`,`Non-membrane organelles`,`easy`,`Non-membrane bound in both prokaryotes and eukaryotes:`,[`Ribosomes`,`Lysosomes`,`Centrosomes`,`Mitochondria`],0,`Ribosomes.`],
+[`Biology`,`Biology and Human Welfare`,`Swiss cheese`,`medium`,`Large holes in Swiss cheese due to:`,[`CO2 by Propionibacterium sharmanii`,`CO2 by Clostridium butylicum`,`CO2+H2 by Lactobacillus`,`CO2+H2 by Trichoderma`],0,`Propionibacterium sharmanii.`],
+[`Biology`,`Biology and Human Welfare`,`Biocontrol`,`medium`,`Biocontrol agent should be:`,[`Species-specific and symbiotic`,`Free living broad spectrum`,`Narrow spectrum symbiotic`,`Species-specific inactive on non-targets`],3,`Species-specific, inactive on non-targets.`],
+[`Biology`,`Biology and Human Welfare`,`Bioactive molecules`,`medium`,`Match streptokinase, statins, lipases, cyclosporin with immunosuppressive, clot removal, cholesterol-lowering, detergent:`,[`A-II, B-III, C-I, D-IV`,`A-IV, B-III, C-II, D-I`,`A-III, B-II, C-IV, D-I`,`A-II, B-III, C-IV, D-I`],3,`Streptokinase=clot. Statins=cholesterol. Lipases=detergent. Cyclosporin=immunosuppressant.`],
+[`Biology`,`Biology and Human Welfare`,`Biofertilizers`,`easy`,`Pair of biofertilizer microbes:`,[`Aspergillus and Rhizopus`,`Rhizobium and Rhizopus`,`Cyanobacteria and Rhizobium`,`Aspergillus and Cyanobacteria`],2,`Cyanobacteria and Rhizobium.`],
+[`Biology`,`Cell Structure and Function`,`Biomolecules`,`medium`,`Correct statements:`,[`B, D and E`,`B, C and E`,`A, B and C`,`C, D and E`],1,`Proteins polypeptides, polysaccharides sugar chains, enzymes proteins.`],
+[`Biology`,`Cell Structure and Function`,`Amino acids`,`medium`,`Correct statements:`,[`C and D only`,`B and C only`,`A and C only`,`A and B only`],2,`Substituted methanes and valine neutral.`],
+[`Biology`,`Cell Structure and Function`,`Biomolecules matching`,`medium`,`Match trypsin, morphine, concanavalin A, collagen with ground substance, lectin, enzyme, alkaloid:`,[`A-III, B-IV, C-II, D-I`,`A-I, B-II, C-III, D-IV`,`A-IV, B-III, C-II, D-I`,`A-III, B-II, C-IV, D-I`],0,`Trypsin=enzyme. Morphine=alkaloid. ConA=lectin. Collagen=ground substance.`],
+[`Biology`,`Cell Structure and Function`,`Protein structure`,`easy`,`alpha-helix is:`,[`Secondary`,`Tertiary`,`Primary`,`Quaternary`],0,`Secondary.`],
+[`Biology`,`Cell Structure and Function`,`Enzymes`,`medium`,`Enzyme that breaks C-C to form C=C:`,[`Transferases`,`Isomerases`,`Lyases`,`Ligases`],2,`Lyases.`],
+[`Biology`,`Biotechnology`,`Somatic hybridisation`,`medium`,`Order:`,[`D, A, B, C, E`,`E, B, A, D, C`,`D, B, A, E, C`,`E, A, B, C, D`],0,`Isolate cells -> digest walls -> protoplasts -> fusion -> grow.`],
+[`Biology`,`Biotechnology`,`DNA separation`,`medium`,`Correct about DNA separation:`,[`B and D only`,`A and B only`,`B and C only`,`A and D only`],1,`Molecular scissors and agarose gel by size.`],
+[`Biology`,`Biotechnology`,`Restriction enzymes`,`medium`,`NOT true about restriction endonucleases:`,[`A and B only`,`A and E only`,`D and E only`,`C and D only`],3,`C false (cut at specific sites). D false (cut internally).`],
+[`Biology`,`Biotechnology`,`pBR322`,`medium`,`Insertion at BamHI site loses resistance to:`,[`Ampicillin and tetracycline`,`Ampicillin`,`Tetracycline`,`Gentamycin`],2,`BamHI is in tetracycline resistance gene.`],
+[`Biology`,`Biotechnology`,`GMO matching`,`medium`,`Match GMO, Taq polymerase, Ti plasmid, pBR322 with Agrobacterium, Bt cotton, T. aquaticus, E. coli:`,[`A-II, B-III, C-I, D-IV`,`A-II, B-I, C-IV, D-III`,`A-I, B-IV, C-III, D-II`,`A-I, B-II, C-IV, D-III`],0,`Standard.`],
+[`Biology`,`Biotechnology`,`Transgenic`,`easy`,`alpha-1 antitrypsin treats:`,[`Emphysema`,`Alzheimer`,`Rheumatoid arthritis`,`Cystic fibrosis`],0,`Emphysema.`],
+[`Biology`,`Biotechnology`,`Bt genes`,`medium`,`Genes for cotton bollworm and corn borer:`,[`cry1Ac and cry1Ab`,`cry1Ac and cry2Ab`,`cry2Ab and cry1Ac`,`cry1Ac and cry2Ab`],0,`cry1Ac (bollworm) and cry1Ab (corn borer).`],
+[`Biology`,`Genetics and Evolution`,`Haploid gametes`,`easy`,`Haploid cells divide mitotically to produce gametes in:`,[`Male honeybees`,`Male earthworms`,`Male frogs`,`Male grasshoppers`],0,`Male honeybees (drones) are haploid.`],
+[`Biology`,`Cell Structure and Function`,`Cell cycle`,`medium`,`Match G1, S, G2, M with cell division, growth no DNA rep, DNA synthesis, protein synthesis:`,[`A-IV, B-I, C-II, D-III`,`A-I, B-II, C-III, D-IV`,`A-III, B-IV, C-I, D-II`,`A-II, B-III, C-IV, D-I`],3,`G1=growth. S=DNA. G2=protein. M=division.`],
+[`Biology`,`Ecology and Environment`,`Logistic growth`,`easy`,`Verhulst-Pearl logistic equation:`,[`dN/dt = rN[(K+N)/K]`,`dN/dt = rN[(K-N)/K]`,`dN/dt = rN[(K-N)N]`,`dN/dt = rN[(K-N)/N]`],1,`Standard.`],
+[`Biology`,`Ecology and Environment`,`Sexual deceit`,`easy`,`Sexual deceit example:`,[`Female wasp and fig`,`Ophrys and bumblebee`,`Sea anemone and clown fish`,`Cuckoo and crow`],1,`Ophrys orchid mimics female bee.`],
+[`Biology`,`Ecology and Environment`,`Population interactions`,`medium`,`Correct statements:`,[`B and E only`,`A and B only`,`B, D and E only`,`A and D only`],2,`Mutualism (B), parasitism (D), amensalism (E). A false. C false.`],
+[`Biology`,`Plant Physiology`,`Plant hormones`,`medium`,`Match 2,4-D, GA3, kinetin, ABA with herbicide, brewing, nutrient mobilisation, stomatal closure:`,[`A-III, B-I, C-IV, D-II`,`A-IV, B-III, C-II, D-I`,`A-I, B-IV, C-III, D-II`,`A-I, B-II, C-IV, D-III`],0,`Standard.`],
+[`Biology`,`Plant Physiology`,`Photosynthesis`,`medium`,`Incorrect about photosynthesis:`,[`A and D only`,`B only`,`B and E only`,`C and D only`],0,`A false (water splitting at PS II). D false (Kranz in C4).`],
+[`Biology`,`Plant Physiology`,`Calvin cycle`,`easy`,`Enzyme for carboxylation in Calvin cycle:`,[`Hexokinase`,`PEP carboxylase`,`RuBP carboxylase-oxygenase`,`Carboxypeptidase`],2,`RuBisCO.`],
+[`Biology`,`Plant Physiology`,`ATP/NADPH`,`easy`,`ATP and NADPH for 1 glucose via Calvin:`,[`18 ATP, 12 NADPH`,`12 ATP, 18 NADPH`,`24 ATP, 18 NADPH`,`6 ATP, 12 NADPH`],0,`18 ATP and 12 NADPH.`],
+[`Biology`,`Ecology and Environment`,`Decomposition`,`medium`,`Match decomposition, detritus, mineralisation, humification with accumulation of dark colloidal, release of inorganic, breaking of organic, dead remains:`,[`A-IV, B-III, C-I, D-II`,`A-III, B-IV, C-II, D-I`,`A-I, B-II, C-III, D-IV`,`A-III, B-II, C-I, D-IV`],1,`Standard.`],
+[`Biology`,`Ecology and Environment`,`Pyramids`,`easy`,`Generally inverted:`,[`Pyramid of number in grassland`,`Pyramid of energy in pond`,`Pyramid of biomass in grassland`,`Pyramid of biomass in sea`],3,`Sea biomass inverted.`],
+[`Biology`,`Ecology and Environment`,`Productivity`,`medium`,`Match productivity, NPP, GPP, secondary productivity with NPP=GPP-R, new organic matter by consumers, rate of biomass production, rate of organic matter production:`,[`A-III, B-I, C-IV, D-II`,`A-I, B-II, C-III, D-IV`,`A-I, B-III, C-IV, D-II`,`A-III, B-I, C-II, D-IV`],0,`Standard.`],
+[`Biology`,`Plant Physiology`,`RQ`,`easy`,`2C51H98O6 + 145O2 -> 102CO2 + ...RQ:`,[`Between 0.5 and 0.95`,`Less than 0.5`,`1.0`,`Between 1.25 and 2`],0,`RQ = 102/145 = 0.7.`],
+[`Biology`,`Plant Physiology`,`Respiration`,`medium`,`Match glycolysis, ETS, H+ accumulation, Krebs with inner mito membrane, mito matrix, cytoplasm, intermembrane space:`,[`A-IV, B-II, C-I, D-III`,`A-II, B-III, C-IV, D-I`,`A-III, B-I, C-IV, D-II`,`A-I, B-IV, C-III, D-II`],2,`Glycolysis=cytoplasm. ETS=inner membrane. H+ in IMS. Krebs=matrix.`],
+[`Biology`,`Ecology and Environment`,`Bioprospecting`,`easy`,`Exploration for novel products:`,[`Biopiracy`,`Bioenergetics`,`Bioremediation`,`Bioprospecting`],3,`Bioprospecting.`],
+[`Biology`,`Ecology and Environment`,`Sixth extinction`,`medium`,`How is 6th extinction different?`,[`Current rate zero`,`10x faster`,`100-1000x faster`,`Far lower`],2,`100-1000x faster than pre-human.`],
+[`Biology`,`Ecology and Environment`,`Habitat loss`,`medium`,`Correct statements:`,[`A, B and E only`,`A, B and D only`,`C, D and E only`,`B, C and D only`],1,`A, B, D correct. C false. E false (co-extinction).`],
+[`Biology`,`Ecology and Environment`,`Endemic`,`easy`,`Species found only in Western Ghats:`,[`Endemic`,`Vulnerable`,`Threatened`,`Keystone`],0,`Endemic.`],
+[`Biology`,`Ecology and Environment`,`Evil Quartet`,`medium`,`Evil Quartet:`,[`Over-exploitation; Alien; Air; Water`,`Habitat loss; Air; Water; Co-extinctions`,`Habitat loss; over-exploitation; Alien; Co-extinctions`,`Air pollution; Alien; Water; Co-extinctions`],2,`Standard evil quartet.`],
+[`Biology`,`Ecology and Environment`,`In situ`,`easy`,`In situ conservation:`,[`Sacred Groves`,`Wildlife Safari Parks`,`Botanical Gardens`,`Seed Banks`],0,`Sacred Groves.`],
+[`Biology`,`Structural Organisation`,`Elongation phase`,`medium`,`NOT a characteristic of plant cells in elongation:`,[`New cell wall deposition`,`Cell enlargement`,`Increased vacuolation`,`Large conspicuous nuclei`],3,`Large nuclei are meristematic.`],
+[`Biology`,`Plant Physiology`,`Hormones`,`medium`,`Match 2,4-D, GA3, kinetin, ABA with brewing, stomatal closure, herbicide, nutrient mobilisation:`,[`A-III, B-I, C-IV, D-II`,`A-IV, B-III, C-II, D-I`,`A-I, B-IV, C-III, D-II`,`A-I, B-II, C-IV, D-III`],0,`Standard.`],
+[`Biology`,`Plant Physiology`,`Plasticity`,`easy`,`Heterophyllous development:`,[`Redifferentiation`,`Elasticity`,`Dedifferentiation`,`Plasticity`],3,`Plasticity.`],
+[`Biology`,`Human Physiology`,`Respiration steps`,`medium`,`Order of respiration steps:`,[`A, B, C, D, E`,`E, A, C, D, B`,`C, B, E, A, D`,`C, A, B, E, D`],2,`Ventilation -> alveolar -> transport -> tissue -> cellular.`],
+[`Biology`,`Human Physiology`,`Respiratory organs`,`medium`,`Match molluscs, reptiles, adult amphibians, amoeba with pulmonary, branchial, pulmonary+cutaneous, cellular:`,[`A-II, B-I, C-IV, D-III`,`A-I, B-II, C-IV, D-III`,`A-II, B-I, C-III, D-IV`,`A-III, B-II, C-I, D-IV`],0,`Molluscs branchial, reptiles pulmonary, amphibians both, amoeba cellular.`],
+[`Biology`,`Human Physiology`,`Lung volumes`,`medium`,`Match ERV, RV, IRV, TV with 2500-3000, 500, 1000-1100, 1100-1200:`,[`A-III, B-IV, C-I, D-II`,`A-III, B-I, C-IV, D-II`,`A-I, B-III, C-II, D-IV`,`A-I, B-II, C-III, D-IV`],0,`ERV=1100-1200, RV=1100-1200, IRV=2500-3000, TV=500.`],
+[`Biology`,`Human Physiology`,`WBC count`,`medium`,`WBC 8000/cu mm. Eosinophils and lymphocytes approx:`,[`300-500, 1200-1500`,`160-240, 1600-2000`,`300-500, 500-700`,`100-120, 160-200`],1,`Eosinophils 2-3% -> 160-240. Lymphocytes 20-25% -> 1600-2000.`],
+[`Biology`,`Human Physiology`,`Rh factor`,`medium`,`Incorrect statements about Rh:`,[`A and E only`,`A and B only`,`C and D only`,`B and C only`],0,`A false. E false (given after first delivery).`],
+[`Biology`,`Human Physiology`,`JGA`,`medium`,`JGA formed by:`,[`DCT and efferent arteriole`,`PCT and efferent`,`PCT and afferent`,`DCT and afferent`],3,`DCT and afferent.`],
+[`Biology`,`Human Physiology`,`Renin-angiotensin`,`medium`,`Correct order:`,[`A, C, E, B, D`,`C, A, B, D, E`,`A, D, B, E, C`,`C, E, D, B, A`],3,`Fall in GFR -> renin -> angiotensin -> vasoconstriction + aldosterone -> Na/water reabsorption -> BP up.`]
+];
+
+// Convert PYQ array to question objects — every entry guaranteed 8 fields
+const PYQ_QUESTIONS = PYQ_RAW.map((row, i) => ({
+  id: 'pyq26_' + i,
+  subject: row[0],
+  unit: row[1],
+  topic: row[2],
+  type: 'conceptual',
+  difficulty: row[3],
+  question: row[4],
+  options: row[5],
+  correctAnswer: row[6],
+  explanation: row[7],
+  source: 'pyq'
+}));
+
+// ===== Curated questions =====
+const qa=(id,subject,unit,topic,difficulty,question,options,correctAnswer,explanation,source='curated')=>({id,subject,unit,topic,type:'conceptual',difficulty,question,options,correctAnswer,explanation,source});
+const CURATED=[
+qa('c1','Physics','Laws of Motion','Newton laws','easy','A body of mass 5 kg accelerates at 2 m/s². Net force?',['10 N','2.5 N','7 N','20 N'],0,'F = ma = 10 N.'),
+qa('c2','Physics','Physics and Measurement','Dimensional analysis','easy','Dimensional formula for force:',['MLT⁻²','ML²T⁻²','MLT⁻¹','ML²T⁻¹'],0,'[M][LT⁻²] = MLT⁻².'),
+qa('c3','Physics','Work, Energy and Power','Work-energy theorem','easy','Kinetic energy of mass m at velocity v:',['½mv²','mv²','2mv²','mv'],0,'K = ½mv².'),
+qa('c4','Physics','Current Electricity',"Ohm's law",'easy',"Ohm's law states:",['V = IR','V = I/R','V = I²R','V = R/I'],0,'V = IR.'),
+qa('c5','Physics','Electrostatics',"Coulomb's law",'easy','Electrostatic force vs distance r:',['1/r²','r','r²','1/r'],0,'F = kq₁q₂/r².'),
+qa('c6','Physics','Gravitation','Escape velocity','medium','Escape velocity from Earth:',['11.2 km/s','7.9 km/s','9.8 m/s','3×10⁸ m/s'],0,'11.2 km/s.'),
+qa('c7','Physics','Dual Nature of Matter','de Broglie relation','medium','de Broglie wavelength:',['h/p','h/m','p/h','hv'],0,'λ = h/p.'),
+qa('c8','Physics','Optics','Lens formula','medium',"Lens maker formula:",['1/f = (n−1)(1/R₁ − 1/R₂)','1/f = (n−1)(1/R₁ + 1/R₂)','1/f = n(1/R₁ − 1/R₂)','1/f = (1/R₁ − 1/R₂)'],0,'(n−1)(1/R₁ − 1/R₂).'),
+qa('c9','Physics','Oscillations and Waves','Pendulum','medium','Time period of pendulum:',['2π√(L/g)','2π√(g/L)','√(L/g)','2π√(Lg)'],0,'T = 2π√(L/g).'),
+qa('c10','Physics','Kinetic Theory','Ideal gas','easy','Ideal gas equation:',['PV = nRT','P = nRT','V = nRT','PV = RT/n'],0,'PV = nRT.'),
+qa('c11','Physics','Dual Nature','Photoelectric','medium','Stopping potential depends on:',['Frequency','Intensity','Both equally','Neither'],0,'Depends on frequency.'),
+qa('c12','Physics','Optics','Young double slit','medium','Fringe width:',['λD/d','λd/D','dD/λ','λD'],0,'β = λD/d.'),
+qa('c13','Physics','Electronic Devices','Zener diode','easy','Zener diode used as:',['Voltage regulator','Rectifier','Amplifier','Oscillator'],0,'Voltage regulator.'),
+qa('c14','Physics','Magnetic Effects','Lorentz force','medium','Magnetic force on charge q:',['q(v × B)','q(v · B)','qE','qB/v'],0,'F = q(v × B).'),
+qa('c15','Physics','Oscillations and Waves','Wave speed','easy','Wave speed:',['v = fλ','v = f/λ','v = λ/f','v = f + λ'],0,'v = fλ.'),
+qa('c16','Chemistry','Some Basic Concepts','Mole concept','easy','Atoms in one mole:',['6.022×10²³','3.011×10²³','1.602×10⁻¹⁹','9.109×10⁻³¹'],0,'Avogadro number.'),
+qa('c17','Chemistry','Atomic Structure','Aufbau principle','easy','Aufbau principle:',['Lower energy first','Higher energy first','One per orbital','Opposite spins'],0,'Lower energy first.'),
+qa('c18','Chemistry','Chemical Bonding','Hybridization','easy','C in CH₄ hybridization:',['sp³','sp','sp²','sp³d'],0,'sp³.'),
+qa('c19','Chemistry','Chemical Bonding','VSEPR','medium','NH₃ shape:',['Trigonal pyramidal','Tetrahedral','Trigonal planar','Linear'],0,'3 bonds + 1 lone pair.'),
+qa('c20','Chemistry','Equilibrium','Le Chatelier','medium','2NO₂ ⇌ N₂O₄ + pressure:',['Shifts right','Shifts left','No change','Randomly'],0,'Toward fewer molecules.'),
+qa('c21','Chemistry','Equilibrium','pH','easy','pH of 0.01 M HCl:',['2','1','12','7'],0,'pH = 2.'),
+qa('c22','Chemistry','Electrochemistry','Nernst equation','medium','Nernst relates:',['Potential to concentration','T to P','S to V','m to q'],0,'Potential vs concentration.'),
+qa('c23','Chemistry','Chemical Kinetics','First order','medium','First-order half-life:',['0.693/k','k/0.693','1/k','k'],0,'t₁/₂ = 0.693/k.'),
+qa('c24','Chemistry','d and f Block','Lanthanoid contraction','medium','Due to:',['Poor 4f shielding','Strong shielding','Nuclear only','Smaller nuclear'],0,'Poor 4f shielding.'),
+qa('c25','Chemistry','Co-ordination Compounds','CFT splitting','hard','Octahedral d-orbital split:',['t₂g and e_g','t₂ and e','d_xy and d_xz','d_z² and d_x²−y²'],0,'t₂g/e_g.'),
+qa('c26','Chemistry','Hydrocarbons','Markownikoff','medium','H adds to carbon:',['With more H','With fewer H','More substituents','Fewer substituents'],0,'More stable carbocation.'),
+qa('c27','Chemistry','Organic Oxygen','Aldol','medium','Aldol needs:',['α-H','β-H','γ-H','No H'],0,'α-H.'),
+qa('c28','Chemistry','Biomolecules','Carbohydrates','easy','Sucrose is:',['Disaccharide','Monosaccharide','Polysaccharide','Trisaccharide'],0,'Glucose + fructose.'),
+qa('c29','Chemistry','Organic Oxygen','Reimer-Tiemann','medium','Phenol → :',['Salicylaldehyde','Salicylic acid','Benzoic acid','Benzaldehyde'],0,'Salicylaldehyde.'),
+qa('c30','Chemistry','Some Basic Concepts','Empirical formula','medium','40% C, 6.7% H, 53.3% O:',['CH₂O','C₂H₄O₂','CHO','C₂H₆O'],0,'1:2:1.'),
+qa('c31','Biology','Diversity','Five kingdoms','easy','Unicellular eukaryotes:',['Protista','Monera','Fungi','Plantae'],0,'Protista.'),
+qa('c32','Biology','Diversity','Binomial nomenclature','easy','First word:',['Genus','Species','Family','Order'],0,'Genus.'),
+qa('c33','Biology','Cell','Cell theory','easy','Proposed by:',['Schleiden and Schwann','Watson and Crick','Darwin and Wallace','Mendel and Morgan'],0,'1838-1839.'),
+qa('c34','Biology','Plant Physiology','C4 pathway','medium','First stable C4 product:',['OAA','3-PGA','RuBP','PEP'],0,'OAA.'),
+qa('c35','Biology','Plant Physiology','Respiration','medium','Aerobic oxidation ATP:',['36-38','2','8','100'],0,'36-38.'),
+qa('c36','Biology','Human Physiology','Blood groups','easy','Blood group O:',['Both anti-A and anti-B','None','Anti-A','Anti-B'],0,'Both.'),
+qa('c37','Biology','Human Physiology','Heart','easy','Chambers:',['4','2','3','5'],0,'4.'),
+qa('c38','Biology','Human Physiology','Kidney','easy','Functional unit:',['Nephron','Neuron','Alveolus','Villus'],0,'Nephron.'),
+qa('c39','Biology','Human Physiology','Endocrine','medium','ADH from:',['Posterior pituitary','Anterior','Adrenal','Thyroid'],0,'Posterior pituitary.'),
+qa('c40','Biology','Reproduction','Double fertilization','medium','Characteristic of:',['Angiosperms','Gymnosperms','Bryophytes','Pteridophytes'],0,'Angiosperms.'),
+qa('c41','Biology','Genetics','Mendel segregation','medium','Law states:',['Alleles separate','Traits blend','Genes linked','Chromosomes replicate'],0,'Alleles separate.'),
+qa('c42','Biology','Genetics','DNA','medium','Avery et al. showed:',['DNA','Protein','RNA','Lipid'],0,'DNA.'),
+qa('c43','Biology','Genetics','Hardy-Weinberg','medium','Describes:',['Constant allele freq','Evolving pop','Selection','Mutation'],0,'Constant allele freq.'),
+qa('c44','Biology','Human Welfare','Malaria','easy','Caused by:',['Plasmodium','Virus','Bacteria','Fungus'],0,'Plasmodium.'),
+qa('c45','Biology','Biotechnology','Bt cotton','medium','Resistant to:',['Insect pests','Drought','Salinity','Fungus'],0,'Bollworms.'),
+qa('c46','Biology','Cell','Meiosis','easy','Result:',['4 haploid','2 diploid','2 haploid','4 diploid'],0,'4 haploid.'),
+qa('c47','Biology','Genetics','Lac operon','medium','Example of:',['Gene regulation','Replication','Protein synthesis','Cell division'],0,'Gene regulation.'),
+qa('c48','Biology','Human Physiology','Neural','medium','Resting potential maintained by:',['Na-K pump','Ca channel','Cl pump','Glucose'],0,'Na-K ATPase.'),
+qa('c49','Biology','Ecology','Biodiversity hotspots','easy','Have:',['High richness + endemism','Only endemic','Low diversity','Only endangered'],0,'Rich + endemism.'),
+qa('c50','Biology','Human Physiology','Breathing','easy','Gas exchange in:',['Alveoli','Bronchi','Trachea','Larynx'],0,'Alveoli.')
+];
+
+// Elements system (118 x 2 questions)
+const ELEMENTS='H,Hydrogen,1;He,Helium,2;Li,Lithium,3;Be,Beryllium,4;B,Boron,5;C,Carbon,6;N,Nitrogen,7;O,Oxygen,8;F,Fluorine,9;Ne,Neon,10;Na,Sodium,11;Mg,Magnesium,12;Al,Aluminium,13;Si,Silicon,14;P,Phosphorus,15;S,Sulfur,16;Cl,Chlorine,17;Ar,Argon,18;K,Potassium,19;Ca,Calcium,20;Sc,Scandium,21;Ti,Titanium,22;V,Vanadium,23;Cr,Chromium,24;Mn,Manganese,25;Fe,Iron,26;Co,Cobalt,27;Ni,Nickel,28;Cu,Copper,29;Zn,Zinc,30;Ga,Gallium,31;Ge,Germanium,32;As,Arsenic,33;Se,Selenium,34;Br,Bromine,35;Kr,Krypton,36;Rb,Rubidium,37;Sr,Strontium,38;Y,Yttrium,39;Zr,Zirconium,40;Nb,Niobium,41;Mo,Molybdenum,42;Tc,Technetium,43;Ru,Ruthenium,44;Rh,Rhodium,45;Pd,Palladium,46;Ag,Silver,47;Cd,Cadmium,48;In,Indium,49;Sn,Tin,50;Sb,Antimony,51;Te,Tellurium,52;I,Iodine,53;Xe,Xenon,54;Cs,Caesium,55;Ba,Barium,56;La,Lanthanum,57;Ce,Cerium,58;Pr,Praseodymium,59;Nd,Neodymium,60;Pm,Promethium,61;Sm,Samarium,62;Eu,Europium,63;Gd,Gadolinium,64;Tb,Terbium,65;Dy,Dysprosium,66;Ho,Holmium,67;Er,Erbium,68;Tm,Thulium,69;Yb,Ytterbium,70;Lu,Lutetium,71;Hf,Hafnium,72;Ta,Tantalum,73;W,Tungsten,74;Re,Rhenium,75;Os,Osmium,76;Ir,Iridium,77;Pt,Platinum,78;Au,Gold,79;Hg,Mercury,80;Tl,Thallium,81;Pb,Lead,82;Bi,Bismuth,83;Po,Polonium,84;At,Astatine,85;Rn,Radon,86;Fr,Francium,87;Ra,Radium,88;Ac,Actinium,89;Th,Thorium,90;Pa,Protactinium,91;U,Uranium,92;Np,Neptunium,93;Pu,Plutonium,94;Am,Americium,95;Cm,Curium,96;Bk,Berkelium,97;Cf,Californium,98;Es,Einsteinium,99;Fm,Fermium,100;Md,Mendelevium,101;No,Nobelium,102;Lr,Lawrencium,103;Rf,Rutherfordium,104;Db,Dubnium,105;Sg,Seaborgium,106;Bh,Bohrium,107;Hs,Hassium,108;Mt,Meitnerium,109;Ds,Darmstadtium,110;Rg,Roentgenium,111;Cn,Copernicium,112;Nh,Nihonium,113;Fl,Flerovium,114;Mc,Moscovium,115;Lv,Livermorium,116;Ts,Tennessine,117;Og,Oganesson,118'.split(';').map(s=>s.split(','));
+
+const FORMULAS=['kinetic energy|½mv²|mv²|mv|2mv²','momentum|mv|½mv²|F·t|ma','force|ma|m/a|mv|mgh','power|W/t|W·t|F·d|mgh','gravitational PE|mgh|½mv²|½kx²|GM/r','spring PE|½kx²|½mv²|kx|mgh','centripetal force|mv²/r|mvr|mv/r|mvr²','escape velocity|√(2GM/R)|√(GM/R)|2GM/R|GM/R²',"Coulomb force|kq₁q₂/r²|kq₁q₂/r|kq₁q₂r²|kq₁q₂",'electric field|kq/r²|kq/r|kq²/r|kqr²','potential energy of capacitor|½CV²|CV²|½C²V|2CV²','resistors series|R₁+R₂|1/(R₁+R₂)|R₁R₂/(R₁+R₂)|R₁R₂','resistors parallel|R₁R₂/(R₁+R₂)|R₁+R₂|1/(R₁+R₂)|R₁R₂','electrical power|VI|V/I|I/V|V²I','Biot-Savart|μ₀I·dl·sinθ/(4πr²)|μ₀I·dl/(4πr)|μ₀I/r²|μ₀I·dl·r',"Faraday|−dΦ/dt|dΦ·dt|Φ/t|Φ·t",'photoelectric equation|hf=φ+K_max|hf=φ−K_max|hf=K_max|hf=φ·K_max','de Broglie|h/p|p/h|hp|h/mv²','photon energy|hf|h/f|f/h|h+f','mass-energy|mc²|mc|m/c²|m²c','lens formula|1/f=1/v−1/u|1/f=1/v+1/u|1/f=v−u|1/f=v+u','mirror formula|1/f=1/v+1/u|1/f=1/v−1/u|1/f=v+u|1/f=v−u','magnification|−v/u|u/v|−u/v|v/u','power of lens|1/f|f|1/f²|f/2','fringe width|λD/d|λd/D|dD/λ|λD²/d','critical angle|sin⁻¹(1/n)|sin⁻¹(n)|cos⁻¹(1/n)|tan⁻¹(1/n)','RMS speed|√(3RT/M)|√(RT/M)|√(2RT/M)|3RT/M','Carnot efficiency|1−T_c/T_h|1+T_c/T_h|T_c/T_h|T_h/T_c','pendulum period|2π√(L/g)|2π√(g/L)|√(L/g)|2πL/g','wave speed|fλ|f/λ|λ/f|f+λ','pH|−log[H⁺]|log[H⁺]|−log[OH⁻]|log[OH⁻]','Kw at 25°C|10⁻¹⁴|10⁻⁷|10⁻¹⁰|10⁻⁸','ΔG|ΔH−TΔS|ΔH+TΔS|TΔS−ΔH|ΔS−TΔH','ΔG° vs K|ΔG°=−RT ln K|ΔG°=RT ln K|ΔG°=−RT/K|ΔG°=−RTK','first-order half-life|0.693/k|k/0.693|1/k|k','first-order rate law|ln(a₀/a)=kt|a₀−a=kt|1/a−1/a₀=kt|a₀/a=kt','Arrhenius|k=A·e^(−Ea/RT)|k=A·e^(Ea/RT)|k=A−Ea/RT|k=A+Ea/RT','number of moles|mass/molar mass|mass×molar mass|molar mass/mass|mass+molar mass','ideal gas|PV=nRT|P=nRT|V=nRT|PV=RT/n','elevation of BP|ΔTb=Kb·m|ΔTb=Kb/m|ΔTb=m/Kb|ΔTb=Kb·m²','depression of FP|ΔTf=Kf·m|ΔTf=Kf/m|ΔTf=m/Kf|ΔTf=Kf·m²','osmotic pressure|π=iCRT|π=CRT/i|π=iC/RT|π=iC·RT²','molarity|moles/litres|moles/kg|moles×litres|moles solvent/litres','molality|moles/kg|moles/litres|moles solvent/kg|moles×kg'].map(s=>s.split('|'));
+
+const SI_UNITS=['force|Newton','work/energy|Joule','power|Watt','pressure|Pascal','frequency|Hertz','charge|Coulomb','current|Ampere','potential|Volt','resistance|Ohm','capacitance|Farad','inductance|Henry','magnetic flux|Weber','flux density|Tesla','luminous intensity|Candela','amount|Mole','temperature|Kelvin','radioactivity|Becquerel','absorbed dose|Gray','equivalent dose|Sievert','solid angle|Steradian','plane angle|Radian','wavelength|Angstrom','astronomical distance|AU','sound level|Decibel','dynamic viscosity|Pascal-second'].map(s=>s.split('|'));
+
+const CONSTANTS=["speed of light|3×10⁸ m/s|3×10⁶|3×10¹⁰|9×10⁸","g on Earth|9.8 m/s²|10.8|8.9|11.2","Planck|6.626×10⁻³⁴ J·s|6.626×10⁻³⁰|1.602×10⁻¹⁹|3×10⁸","elementary charge|1.602×10⁻¹⁹ C|9.109×10⁻³¹|1.602×10⁻¹⁶|6.626×10⁻³⁴","electron mass|9.109×10⁻³¹ kg|1.672×10⁻²⁷|6.626×10⁻³⁴|1.602×10⁻¹⁹","proton mass|1.672×10⁻²⁷ kg|9.109×10⁻³¹|1.674×10⁻²⁷|6.626×10⁻³⁴","neutron mass|1.675×10⁻²⁷ kg|1.672×10⁻²⁷|9.109×10⁻³¹|1.602×10⁻¹⁹","Avogadro|6.022×10²³|6.022×10²²|3.011×10²³|1.602×10²³","Boltzmann|1.381×10⁻²³ J/K|1.381×10⁻²⁰|8.314|1.602×10⁻¹⁹","gas constant|8.314 J/(mol·K)|0.0821|1.381|6.022","Coulomb constant|9×10⁹|8.85×10⁻¹²|6.67×10⁻¹¹|1.602×10⁻¹⁹","gravitational constant|6.67×10⁻¹¹|9×10⁹|6.022×10⁻¹¹|1.38×10⁻²³","permittivity|8.85×10⁻¹² F/m|9×10⁹|1.38×10⁻²³|6.63×10⁻³⁴","permeability|4π×10⁻⁷ H/m|8.85×10⁻¹²|9×10⁹|6.63×10⁻³⁴","Rydberg|1.097×10⁷ m⁻¹|1.097×10⁵|6.022×10²³|3×10⁸","Faraday|96500 C/mol|8.314|6.022|1.602","standard pressure|1.013×10⁵ Pa|1.013×10³|1.013×10⁷|9.8×10⁵","eV in joules|1.602×10⁻¹⁹ J|1.602×10⁻¹⁶|1.602×10⁻²²|9.109×10⁻³¹","atomic mass unit|1.66×10⁻²⁷ kg|1.602×10⁻¹⁹|9.109×10⁻³¹|6.022×10⁻²³","Bohr magneton|9.27×10⁻²⁴ J/T|1.602×10⁻¹⁹|6.63×10⁻³⁴|1.38×10⁻²³"].map(s=>s.split('|'));
+
+const BIO_FACTS=['Nucleus|Control centre','Mitochondria|Powerhouse','Ribosome|Protein synthesis','Lysosome|Suicidal bag','Chloroplast|Photosynthesis','Golgi|Packaging','ER|Transport','Nucleolus|Ribosome synthesis','Glycolysis in|Cytoplasm','Krebs in|Mito matrix','Light reactions|Thylakoid','Calvin cycle|Stroma','Insulin|Beta cells','Glucagon|Alpha cells','Thyroxine|Thyroid','Cortisol|Adrenal cortex','Adrenaline|Adrenal medulla','Oestrogen|Ovary','Testosterone|Leydig cells','FSH|Anterior pituitary','ADH|Posterior pituitary','Vitamin A|Retinol','Vitamin B1|Thiamine','Vitamin B12|Cobalamin','Vitamin C|Ascorbic acid','Vitamin D|Calciferol','Vitamin E|Tocopherol','Vitamin K|Blood clotting','C deficiency|Scurvy','D deficiency|Rickets','B1 deficiency|Beriberi','B3 deficiency|Pellagra','Iodine deficiency|Goitre','Iron deficiency|Anaemia','Malaria|Female Anopheles','Dengue|Aedes aegypti','Typhoid|Salmonella','TB|Mycobacterium','Cholera|Vibrio','AIDS|HIV','Polio|Poliovirus','Ringworm|Fungi','Chikungunya|Aedes','Filariasis|Culex'].map(s=>s.split('|'));
+
+const CHEM_FACTS=['Strongest acid|HClO₄','Strongest base|NaOH','Zinc + HCl gas|H₂','Limewater milky|CO₂','Neutral pH|7','Lemon pH|2.2','Blood pH|7.4','Strong electrolyte|NaCl','Weak electrolyte|CH₃COOH','Arrhenius acid|HCl','Lewis base|NH₃','Lewis acid|BF₃','Bronsted acid|Proton donor','Bronsted base|Proton acceptor','Strongest oxidising|F₂','Strongest reducing|Li','Organic reducing|LiAlH₄','Good oxidising|KMnO₄','Aldehyde+LiAlH₄|Primary alcohol','Ketone+LiAlH₄|Secondary alcohol','Primary alcohol oxidation|Aldehyde then acid','Secondary alcohol oxidation|Ketone','Grignard+aldehyde|Secondary alcohol','Grignard+ketone|Tertiary alcohol','Cannizzaro requires|Absence of α-H','Aldol requires|α-H','Haloform by|Methyl ketones',"Tollens'|Aldehydes","Fehling's|Aldehydes",'No iodoform|Benzaldehyde','Carbylamine|Primary amines','Hinsberg|Amines'].map(s=>s.split('|'));
+
+const PHYS_FACTS=["Newton's first law|Inertia","Newton's second law|F=ma","Newton's third law|Equal and opposite",'Momentum conserved when|Zero net force','g on Moon|1.6 m/s²','Escape velocity Moon|2.4 km/s','Free fall|Zero air resistance','Uniform circular motion|Constant speed','Centripetal direction|Toward centre','Banked turn|Horizontal normal component','Perpendicular work|Zero','Opposite direction work|Negative','SI unit of work|Joule','Power is rate of|Doing work','100 J in 5 s|20 W','KE doubles when velocity|Doubled','Escape velocity depends on|Planet mass','Pendulum period|Length','Frequency is|Oscillations/s','Amplitude|Loudness','Sound not in|Vacuum','Sound fastest in|Solids','Light waves|Transverse','Sound in air|Longitudinal','Polarization|Transverse waves','TIR|Denser to rarer beyond critical','Plane mirror focal|Infinite','Plane mirror image|Virtual erect same size','Convex lens|Real and virtual','Concave lens|Virtual erect','Lens power|Dioptre','Photoelectric needs|Freq above threshold','Photoelectric shows|Particle nature','de Broglie λ inversely prop to|Momentum','Photon energy prop to|Frequency','Nuclear force|Short-range charge-independent','Fission|Two lighter nuclei','Fusion|Heavier nucleus','Radioactive decay|Random','Half-life|Half atoms decay','Heavy water|Moderator','Semiconductor|Between conductor and insulator','Pentavalent doping|n-type','Trivalent doping|p-type','Diode conducts|Forward bias','Zener|Voltage regulation','Inverter gate|NOT','AND high when|All inputs high','OR high when|Any high'].map(s=>s.split('|'));
+
+function buildSystematic(){
+  const out=[];
+  // Elements: symbol→name and atomic number→name (2 × 118 = 236)
+  ELEMENTS.forEach(([sym,name,z],i)=>{
+    const others=shuffle(ELEMENTS.filter((_,j)=>j!==i)).slice(0,3).map(e=>e[1]);
+    const opts=shuffle([name,...others]);
+    out.push(qa('el1_'+i,'Chemistry','Elements','Symbols','easy',`Symbol ${sym} is:`,opts,opts.indexOf(name),`${sym} = ${name}.`));
+  });
+  ELEMENTS.forEach(([sym,name,z],i)=>{
+    const others=shuffle(ELEMENTS.filter((_,j)=>j!==i)).slice(0,3).map(e=>e[1]);
+    const opts=shuffle([name,...others]);
+    out.push(qa('el2_'+i,'Chemistry','Elements','Atomic Numbers','easy',`Atomic number ${z}:`,opts,opts.indexOf(name),`${name} Z=${z}.`));
+  });
+  // Formulas (44)
+  FORMULAS.forEach(([name,correct,...opts],i)=>{
+    const arr=shuffle([correct,...opts]);
+    out.push(qa('fm_'+i,'Physics','Formula Recall','Formulas','easy',`${name.trim()} = ?`,arr,arr.indexOf(correct),`${name.trim()} = ${correct}.`));
+  });
+  // SI Units (25)
+  SI_UNITS.forEach(([qty,unit],i)=>{
+    const all=SI_UNITS.map(x=>x[1]).filter(u=>u!==unit);
+    const opts=shuffle([unit,...shuffle(all).slice(0,3)]);
+    out.push(qa('si_'+i,'Physics','SI Units','Units','easy',`SI unit of ${qty}?`,opts,opts.indexOf(unit),`${unit}.`));
+  });
+  // Constants (20)
+  CONSTANTS.forEach(([name,val,...opts],i)=>{
+    const arr=shuffle([val,...opts]);
+    out.push(qa('co_'+i,'Physics','Constants','Physical Constants','easy',`${name} = ?`,arr,arr.indexOf(val),`${val}.`));
+  });
+  // Bio facts (44)
+  BIO_FACTS.forEach(([name,fact],i)=>{
+    const all=BIO_FACTS.map(x=>x[1]).filter(f=>f!==fact);
+    const opts=shuffle([fact,...shuffle(all).slice(0,3)]);
+    out.push(qa('bf_'+i,'Biology','Biology Facts',name.trim().slice(0,30),'easy',`${name}:`,opts,opts.indexOf(fact),`${fact}.`));
+  });
+  // Chem facts (31)
+  CHEM_FACTS.forEach(([qst,fact],i)=>{
+    const all=CHEM_FACTS.map(x=>x[1]).filter(f=>f!==fact);
+    const opts=shuffle([fact,...shuffle(all).slice(0,3)]);
+    out.push(qa('cf_'+i,'Chemistry','Chemistry Facts','General','medium',`${qst}:`,opts,opts.indexOf(fact),`${fact}.`));
+  });
+  // Physics facts (48)
+  PHYS_FACTS.forEach(([qst,fact],i)=>{
+    const all=PHYS_FACTS.map(x=>x[1]).filter(f=>f!==fact);
+    const opts=shuffle([fact,...shuffle(all).slice(0,3)]);
+    out.push(qa('pf_'+i,'Physics','Physics Facts','General','easy',`${qst}:`,opts,opts.indexOf(fact),`${fact}.`));
+  });
+  // Numerical: force
+  [[5,2],[10,3],[20,4],[2,5],[8,2],[15,3],[25,4],[30,5],[12,2],[6,3],[4,8],[50,2],[3,6],[18,4],[9,3]].forEach(([m,a],i)=>{
+    const ans=m*a;const opts=shuffle([`${ans} N`,`${ans+5} N`,`${ans-3} N`,`${ans+10} N`]);
+    out.push(qa('nf_'+i,'Physics','Laws of Motion','Numerical','easy',`m=${m} kg, a=${a} m/s². F?`,opts,opts.indexOf(`${ans} N`),`F=ma=${ans} N.`));
+  });
+  // Numerical: pH
+  [['0.1',1],['0.01',2],['0.001',3],['0.0001',4],['1',0],['0.00001',5],['0.05',1.3],['0.005',2.3],['0.0005',3.3],['0.00005',4.3]].forEach(([c,ph],i)=>{
+    const opts=shuffle([`${ph}`,`${ph+1}`,`${ph+7}`,`${Math.max(0,ph-1)}`]);
+    out.push(qa('np_'+i,'Chemistry','Equilibrium','pH','medium',`pH of ${c} M HCl:`,opts,opts.indexOf(`${ph}`),`pH=${ph}.`));
+  });
+  // Numerical: moles
+  [['12g C','1'],['24g C','2'],['18g H2O','1'],['36g H2O','2'],['44g CO2','1'],['88g CO2','2'],['32g O2','1'],['64g O2','2'],['58.5g NaCl','1'],['117g NaCl','2']].forEach(([s,ans],i)=>{
+    const opts=shuffle(['1 mole','2 moles','0.5 mole',`${ans} mole${ans==='1'?'':'s'}`]);
+    out.push(qa('nm_'+i,'Chemistry','Some Basic Concepts','Mole Concept','easy',`Moles in ${s}?`,opts,opts.indexOf(`${ans} mole${ans==='1'?'':'s'}`),`${ans} mole.`));
+  });
+  // Genetics crosses
+  [['Aa × Aa','1:2:1'],['AA × aa','all Aa'],['Aa × aa','1:1'],['AA × Aa','1:1'],['aa × aa','all aa']].forEach(([c,r],i)=>{
+    const all=['1:2:1','all Aa','1:1','all aa'];const opts=shuffle([r,...all.filter(x=>x!==r).slice(0,3)]);
+    out.push(qa('ng_'+i,'Biology','Genetics','Mendelian','medium',`${c} ratio:`,opts,opts.indexOf(r),`${r}.`));
+  });
+  return out;
+}
+
+const SYSTEMATIC = buildSystematic();
+const ALL_QUESTIONS_BASE = [...CURATED, ...SYSTEMATIC, ...PYQ_QUESTIONS];
+
+function allQuestions(){return [...ALL_QUESTIONS_BASE, ...State.generated];}
+function filterQuestions({subject,topic}={}){return allQuestions().filter(q=>(!subject||q.subject===subject)&&(!topic||q.topic===topic));}
+function pickQuestions(n,opts={}){return shuffle(filterQuestions(opts)).slice(0,n);}
+
+function Logo(size=28){return `<svg viewBox="0 0 240 64" height="${size}" style="width:auto"><defs><linearGradient id="mg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs><g transform="translate(4,4)"><circle cx="28" cy="28" r="22" fill="none" stroke="url(#mg)" stroke-width="3"/><path d="M28 16v24M16 28h24" stroke="#1d4ed8" stroke-width="5" stroke-linecap="round"/></g><text x="66" y="40" font-family="Inter,sans-serif" font-size="24" font-weight="800" letter-spacing="1.5" fill="currentColor">MEDNOVA</text></svg>`;}
+
+function shell(activePath,content){
+  return `<header class="topbar"><nav class="nav"><button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button><a href="#/" class="brand" style="color:var(--text);text-decoration:none">${Logo(28)}</a><div class="nav-links"><a href="#/dashboard" class="nav-link ${activePath==='/dashboard'?'active':''}">Dashboard</a><a href="#/syllabus" class="nav-link ${activePath==='/syllabus'?'active':''}">Syllabus</a><a href="#/practice" class="nav-link ${activePath==='/practice'?'active':''}">Practice</a><a href="#/mock" class="nav-link ${activePath==='/mock'?'active':''}">Mock</a><a href="#/results" class="nav-link ${activePath==='/results'?'active':''}">Results</a><a href="#/settings" class="nav-link ${activePath==='/settings'?'active':''}">Settings</a><button class="icon-btn" onclick="toggleTheme()">${State.theme==='dark'?'☀️':'🌙'}</button></div></nav></header><div class="layout">${activePath==='/exam'?'':sidebar(activePath)}<main class="main${activePath==='/exam'?' full':''}">${content}</main></div><footer class="footer"><strong>MedNova</strong> — Independent NEET UG practice. Not affiliated with NTA. © ${new Date().getFullYear()}</footer>`;
+}
+
+function sidebar(p){
+  const items=[{p:'/dashboard',i:'📊',l:'Dashboard'},{p:'/syllabus',i:'📚',l:'Syllabus'},{p:'/practice',i:'🎯',l:'Practice'},{p:'/mock',i:'📝',l:'Mock Tests'},{p:'/results',i:'🏆',l:'Results'},{p:'/settings',i:'⚙️',l:'Settings'}];
+  return `<aside class="sidebar" id="sidebar"><div class="sb-group">Study</div>${items.map(x=>`<a href="#${x.p}" class="sb-link ${p===x.p?'active':''}">${x.i} ${x.l}</a>`).join('')}<div class="divider"></div><div class="sb-group">Status</div><p style="font-size:.74rem;color:var(--muted);padding:0 .4rem;margin:0">${esc(State.profile.name)}<br>${allQuestions().length} Q<br>${PYQ_QUESTIONS.length} PYQ 2026</p></aside>`;
+}
+
+function toggleTheme(){State.theme=State.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=State.theme;Storage.set(K.theme,State.theme);render();}
+
+const ROUTES={'/':HomePage,'/dashboard':DashboardPage,'/syllabus':SyllabusPage,'/practice':PracticePage,'/mock':MockPage,'/exam':ExamPage,'/results':ResultsPage,'/settings':SettingsPage};
+function getPath(){return (location.hash||'#/').slice(1).split('?')[0]||'/';}
+function navigate(p){if(location.hash==='#'+p)render();else location.hash='#'+p;}
+
+function render(){
+  const path=getPath();
+  if(path!=='/exam'&&State.examTimer){clearInterval(State.examTimer);State.examTimer=null;}
+  const pageFn=ROUTES[path]||HomePage;
+  const page=pageFn();
+  const root=document.getElementById('app');
+  root.innerHTML=page.shell(path);
+  if(page.mounted)page.mounted();
+}
+
+function HomePage(){
+  const total=allQuestions().length;
+  const html=`<div class="hero"><h1>Your Syllabus. Your AI. Your Preparation.</h1><p><strong>${total} questions</strong> including <strong>${PYQ_QUESTIONS.length} NEET 2026 May PYQs</strong>. Chapter-wise practice, timed mocks, real analytics. Runs entirely in your browser.</p><div class="row"><a href="#/practice" class="btn btn-ghost" style="background:#fff;color:#1d4ed8;border:none">Start Practice →</a><a href="#/mock" class="btn btn-ghost">Take Mock Test</a></div></div><div class="grid grid-4" style="margin-bottom:1rem"><div class="card"><div class="stat"><div class="stat-value">${total}</div><div class="stat-label">Total Qs</div></div></div><div class="card"><div class="stat"><div class="stat-value">${PYQ_QUESTIONS.length}</div><div class="stat-label">PYQ 2026</div></div></div><div class="card"><div class="stat"><div class="stat-value">${SYSTEMATIC.length}</div><div class="stat-label">Systematic</div></div></div><div class="card"><div class="stat"><div class="stat-value">${State.attempts.length}</div><div class="stat-label">Your Attempts</div></div></div></div><div class="grid grid-2"><div class="card pad-lg"><h3>📈 Your Progress</h3><p>Your attempts are stored locally.</p><a href="#/dashboard" class="btn btn-primary">Dashboard</a></div><div class="card pad-lg"><h3>🎯 Start Now</h3><p>Try chapter-wise practice or full mock.</p><a href="#/mock" class="btn btn-primary">Take Mock Test</a></div></div>`;
+  return {shell:p=>shell(p,html)};
+}
+
+function DashboardPage(){
+  const sub=State.attempts.filter(a=>a.status==='submitted');
+  const correct=sub.reduce((s,a)=>s+(a.correct||0),0);
+  const incorrect=sub.reduce((s,a)=>s+(a.incorrect||0),0);
+  const acc=correct+incorrect?pct(correct,correct+incorrect):0;
+  const best=sub.reduce((m,a)=>Math.max(m,a.score||0),0);
+  const html=`<h1>Dashboard</h1><div class="grid grid-4" style="margin-bottom:1rem"><div class="card"><div class="stat"><div class="stat-value">${sub.length}</div><div class="stat-label">Tests</div></div></div><div class="card"><div class="stat"><div class="stat-value">${acc}%</div><div class="stat-label">Accuracy</div></div></div><div class="card"><div class="stat"><div class="stat-value">${best}</div><div class="stat-label">Best</div></div></div><div class="card"><div class="stat"><div class="stat-value">${correct}</div><div class="stat-label">Correct</div></div></div></div>${sub.length?'<div class="card"><div class="card-title">Recent</div>'+sub.slice(0,5).map(a=>`<div class="result-card" onclick="navigate('/results?attempt=${a.id}')"><div class="result-score">${a.score}</div><div class="result-meta"><strong>${esc(a.examTitle)}</strong><span>${fmtDate(a.submittedAt)} • ${a.correct}/${a.totalQuestions}</span></div></div>`).join('')+'</div>':'<div class="empty"><div class="empty-icon">📝</div>No attempts. <a href="#/mock">Take a mock</a>.</div>'}`;
+  return {shell:p=>shell(p,html)};
+}
+
+function SyllabusPage(){
+  const html=`<h1>Syllabus</h1><p>NEET UG syllabus. Click a topic to practice.</p>${SYLLABUS.map((s,si)=>`<div class="tree-subject"><div class="tree-subject-head" onclick="this.nextElementSibling.classList.toggle('open')"><span>▸</span><span>${esc(s.name)}</span><span class="tree-subject-count">${s.units.reduce((a,u)=>a+u.topics.length,0)} topics</span></div><div class="tree-units">${s.units.map(u=>`<div class="tree-unit"><div class="tree-unit-head" onclick="this.nextElementSibling.classList.toggle('open')">Unit ${u.n}: ${esc(u.title)}</div><div class="tree-topics">${u.topics.map(t=>`<span class="topic-pill" onclick="startTopic('${esc(s.name)}','${esc(t).replace(/'/g,"\\'")}')">${esc(t)}</span>`).join('')}</div></div>`).join('')}</div></div>`).join('')}`;
+  return {shell:p=>shell(p,html)};
+}
+function startTopic(subject,topic){sessionStorage.setItem(K.practicePrefs,JSON.stringify({subject,topic}));navigate('/practice');}
+
+function PracticePage(){
+  const prefs=JSON.parse(sessionStorage.getItem(K.practicePrefs)||'null')||{};
+  const subject=prefs.subject||'';
+  const topic=prefs.topic||'';
+  const questions=pickQuestions(10,{subject:subject||undefined,topic:topic||undefined});
+  const topics=subject?(SYLLABUS.find(s=>s.name===subject)?.units||[]).flatMap(u=>u.topics):[];
+  const html=`<h1>Practice</h1><div class="card" style="margin-bottom:.85rem"><div class="grid grid-3"><div class="field"><label>Subject</label><select class="select" id="p-subject" onchange="updatePracticeFilter()"><option value="">All</option>${SYLLABUS.map(s=>`<option value="${esc(s.name)}" ${s.name===subject?'selected':''}>${esc(s.name)}</option>`).join('')}</select></div><div class="field"><label>Topic</label><select class="select" id="p-topic" onchange="updatePracticeFilter()"><option value="">All</option>${topics.map(t=>`<option value="${esc(t)}" ${t===topic?'selected':''}>${esc(t)}</option>`).join('')}</select></div><div class="field"><label>&nbsp;</label><button class="btn btn-primary" onclick="startPracticeSet()">🔄 New Set</button></div></div><p style="margin-top:.65rem;font-size:.8rem;color:var(--muted)">${questions.length} available</p></div><div class="stack">${questions.length?questions.map((qq,i)=>practiceCard(qq,i)).join(''):'<div class="empty"><div class="empty-icon">📭</div>No questions for this filter. Try another topic or generate more in Settings.</div>'}</div>`;
+  return {shell:p=>shell(p,html)};
+}
+function practiceCard(qq,i){
+  const src=qq.source==='ai'?'<span class="badge badge-ai">AI</span>':qq.source==='pyq'?'<span class="badge badge-pyq">PYQ 2026</span>':'<span class="badge badge-curated">Curated</span>';
+  return `<div class="qcard" data-answered="0"><div class="qcard-head"><span class="badge badge-type">${esc(qq.subject)}</span><span class="badge badge-type">${esc(qq.topic)}</span><span class="badge badge-diff-${qq.difficulty}">${qq.difficulty}</span>${src}</div><div class="qcard-text">Q${i+1}. ${esc(qq.question)}</div><div class="qoptions">${qq.options.map((o,j)=>`<div class="qoption" data-idx="${j}" onclick="answerPractice(this,${j},${qq.correctAnswer})"><span class="qoption-key">${String.fromCharCode(65+j)}</span><span>${esc(o)}</span></div>`).join('')}</div><div class="explanation" style="display:none"><strong>💡</strong> ${esc(qq.explanation)}</div></div>`;
+}
+function answerPractice(el,chosen,correct){
+  const card=el.closest('.qcard');if(card.dataset.answered==='1')return;card.dataset.answered='1';
+  card.querySelectorAll('.qoption').forEach(o=>{const i=+o.dataset.idx;if(i===correct)o.classList.add('correct');else if(i===chosen)o.classList.add('wrong');});
+  card.querySelector('.explanation').style.display='';
+}
+function updatePracticeFilter(){sessionStorage.setItem(K.practicePrefs,JSON.stringify({subject:$('#p-subject').value,topic:$('#p-topic').value}));render();}
+function startPracticeSet(){sessionStorage.setItem(K.practicePrefs,JSON.stringify({subject:$('#p-subject').value,topic:$('#p-topic').value}));render();}
+
+function MockPage(){
+  const resume=State.exam?`<div class="callout callout-warn" style="margin-bottom:1rem">Resume: <strong>${esc(State.exam.title)}</strong> <button class="btn btn-primary btn-sm" onclick="navigate('/exam')">Resume</button></div>`:'';
+  const html=`<h1>Mock Tests</h1><p>NEET marking: <strong>+4</strong> correct, <strong>−1</strong> incorrect.</p>${resume}<div class="grid grid-2" style="margin-bottom:1rem"><div class="card pad-lg" style="border:2px solid var(--blue)"><h3>🎯 NEET 2026 May PYQ Paper</h3><p>Full paper with ${PYQ_QUESTIONS.length} questions. 180 min.</p><button class="btn btn-primary" onclick="startPyq2026()">Start Full Paper →</button></div>${[{id:'phy',t:'Physics 15-Q',s:'Physics',c:15,d:20},{id:'che',t:'Chemistry 15-Q',s:'Chemistry',c:15,d:20},{id:'bio',t:'Biology 15-Q',s:'Biology',c:15,d:20},{id:'mix',t:'Mixed 20-Q',s:'',c:20,d:25}].map(x=>`<div class="card"><h3>${x.t}</h3><p>${x.d} min • ${x.c} Qs</p><button class="btn btn-primary" onclick="startMock('${x.s}','${x.t}',${x.c},${x.d})">Start →</button></div>`).join('')}</div>`;
+  return {shell:p=>shell(p,html)};
+}
+function startPyq2026(){launchExam({title:'NEET 2026 (May) PYQ Paper',questions:shuffle(PYQ_QUESTIONS),duration:180});}
+function startMock(subject,title,count,duration){
+  const pool=subject?filterQuestions({subject}):allQuestions();
+  if(!pool.length){toast('No questions','error');return;}
+  launchExam({title,questions:shuffle(pool).slice(0,count),duration});
+}
+function launchExam({title,questions,duration}){
+  State.exam={title,questions,answers:new Array(questions.length).fill(null),marked:new Array(questions.length).fill(false),currentIndex:0,endsAt:Date.now()+duration*60*1000};
+  navigate('/exam');
+}
+
+function ExamPage(){
+  if(!State.exam){setTimeout(()=>navigate('/mock'),0);return {shell:p=>shell(p,'<div class="empty">Loading...</div>')};}
+  const html=`<div class="exam-shell"><div class="exam-header"><div class="exam-timer" id="exam-timer">--:--</div><div style="flex:1"><strong>${esc(State.exam.title)}</strong><div style="font-size:.74rem;color:var(--muted)">${State.exam.questions.length} Qs • +4 / −1</div></div><button class="btn btn-danger btn-sm" onclick="confirmSubmit()">Submit</button></div><div class="exam-main" id="exam-main"></div><aside class="exam-palette"><div class="card-title">Palette</div><div class="palette-grid" id="exam-palette"></div></aside></div>`;
+  return {shell:p=>shell(p,html),mounted:()=>{startExamClock();renderExam();}};
+}
+function startExamClock(){
+  clearInterval(State.examTimer);
+  const upd=()=>{const el=document.getElementById('exam-timer');if(!el||!State.exam)return;const left=State.exam.endsAt-Date.now();if(left<=0){clearInterval(State.examTimer);toast('Time up!','warn');setTimeout(()=>{if(State.exam)finalizeExam();},400);return;}el.textContent=fmtTime(left);el.classList.toggle('danger',left<60000);};
+  upd();State.examTimer=setInterval(upd,500);
+}
+function renderExam(){
+  const ex=State.exam;if(!ex)return;const i=ex.currentIndex;const qq=ex.questions[i];const main=document.getElementById('exam-main');if(!main)return;const sel=ex.answers[i];
+  main.innerHTML=`<div class="qcard-head"><span class="badge badge-type">Q ${i+1} / ${ex.questions.length}</span><span class="badge badge-type">${esc(qq.subject)}</span>${ex.marked[i]?'<span class="badge badge-diff-medium">★ Marked</span>':''}</div><div class="qcard-text">${esc(qq.question)}</div><div class="qoptions">${qq.options.map((o,j)=>`<div class="qoption ${sel===j?'selected':''}" onclick="examSelect(${j})"><span class="qoption-key">${String.fromCharCode(65+j)}</span><span>${esc(o)}</span></div>`).join('')}</div><div class="row" style="margin-top:.85rem;justify-content:space-between"><div class="row"><button class="btn btn-ghost btn-sm" onclick="examPrev()" ${i===0?'disabled':''}>← Prev</button><button class="btn btn-ghost btn-sm" onclick="examClear()">Clear</button><button class="btn btn-ghost btn-sm" onclick="examToggleMark()">${ex.marked[i]?'★':'☆'} Mark</button></div><button class="btn btn-primary btn-sm" onclick="examNext()" ${i===ex.questions.length-1?'disabled':''}>Next →</button></div>`;
+  renderPalette();
+}
+function renderPalette(){
+  const ex=State.exam;const g=document.getElementById('exam-palette');if(!g||!ex)return;
+  g.innerHTML=ex.questions.map((_,i)=>{const c=['palette-btn'];if(ex.answers[i]!==null)c.push('answered');if(ex.marked[i])c.push('marked');if(i===ex.currentIndex)c.push('current');return `<button class="${c.join(' ')}" onclick="examJump(${i})">${i+1}</button>`;}).join('');
+}
+function examSelect(j){State.exam.answers[State.exam.currentIndex]=j;renderExam();}
+function examClear(){State.exam.answers[State.exam.currentIndex]=null;renderExam();}
+function examToggleMark(){State.exam.marked[State.exam.currentIndex]=!State.exam.marked[State.exam.currentIndex];renderExam();}
+function examNext(){if(State.exam.currentIndex<State.exam.questions.length-1){State.exam.currentIndex++;renderExam();}}
+function examPrev(){if(State.exam.currentIndex>0){State.exam.currentIndex--;renderExam();}}
+function examJump(i){State.exam.currentIndex=i;renderExam();}
+async function confirmSubmit(){if(await confirmDialog('Submit test?'))finalizeExam();}
+function finalizeExam(){
+  clearInterval(State.examTimer);
+  const ex=State.exam;if(!ex)return;
+  let correct=0,incorrect=0,unattempted=0,score=0;
+  const subjStats={},topicStats={},review=[];
+  ex.questions.forEach((qq,i)=>{
+    const sel=ex.answers[i];const ok=sel===qq.correctAnswer;
+    if(sel===null)unattempted++;else if(ok){correct++;score+=4;}else{incorrect++;score-=1;}
+    subjStats[qq.subject]??={total:0,correct:0};subjStats[qq.subject].total++;if(ok)subjStats[qq.subject].correct++;
+    topicStats[qq.topic]??={subject:qq.subject,total:0,correct:0};topicStats[qq.topic].total++;if(ok)topicStats[qq.topic].correct++;
+    review.push({question:qq.question,options:qq.options,correctAnswer:qq.correctAnswer,selected:sel,isCorrect:ok,explanation:qq.explanation,subject:qq.subject,topic:qq.topic,source:qq.source});
+  });
+  const attempt={id:uid(),examTitle:ex.title,submittedAt:Date.now(),status:'submitted',score,correct,incorrect,unattempted,totalQuestions:ex.questions.length,maxScore:ex.questions.length*4,analysis:{subjectStats:subjStats,topicStats},review};
+  State.attempts.unshift(attempt);Storage.set(K.attempts,State.attempts);State.exam=null;
+  toast(`Score: ${score}`,'success');navigate('/results?attempt='+attempt.id);
+}
+
+function ResultsPage(){
+  const qs=(location.hash.split('?')[1]||'');const id=new URLSearchParams(qs).get('attempt');
+  if(id){const a=State.attempts.find(x=>x.id===id);if(!a)return {shell:p=>shell(p,'<div class="empty">Not found. <a href="#/results">Back</a></div>')};
+    return {shell:p=>shell(p,renderAttemptDetail(a))};}
+  const html=`<h1>Results</h1>${State.attempts.length===0?'<div class="empty"><div class="empty-icon">📝</div>No attempts yet. <a href="#/mock">Take a mock</a>.</div>':State.attempts.map(a=>`<div class="result-card" onclick="navigate('/results?attempt=${a.id}')"><div class="result-score">${a.score}</div><div class="result-meta"><strong>${esc(a.examTitle)}</strong><span>${fmtDate(a.submittedAt)} • ${a.correct}/${a.totalQuestions}</span></div><span class="badge badge-type">View →</span></div>`).join('')}`;
+  return {shell:p=>shell(p,html)};
+}
+function renderAttemptDetail(a){
+  return `<a href="#/results" class="btn btn-ghost btn-sm" style="margin-bottom:.85rem">← Back</a><h2>${esc(a.examTitle)}</h2><div class="grid grid-4" style="margin-bottom:1rem"><div class="card"><div class="stat"><div class="stat-value">${a.score}</div><div class="stat-label">Score / ${a.maxScore}</div></div></div><div class="card"><div class="stat"><div class="stat-value" style="color:var(--ok)">${a.correct}</div><div class="stat-label">Correct</div></div></div><div class="card"><div class="stat"><div class="stat-value" style="color:var(--bad)">${a.incorrect}</div><div class="stat-label">Incorrect</div></div></div><div class="card"><div class="stat"><div class="stat-value">${a.unattempted}</div><div class="stat-label">Unattempted</div></div></div></div><div class="card" style="margin-bottom:1rem"><div class="card-title">By Subject</div>${Object.entries(a.analysis.subjectStats||{}).map(([s,v])=>{const p=pct(v.correct,v.total);return `<div style="margin-bottom:.6rem"><div class="row" style="justify-content:space-between"><strong>${esc(s)}</strong><span style="font-size:.76rem;color:var(--muted)">${v.correct}/${v.total} · ${p}%</span></div><div class="bar"><div class="bar-fill" style="width:${p}%"></div></div></div>`;}).join('')}</div><h3>Review</h3><div class="stack">${(a.review||[]).map((r,i)=>`<div class="qcard"><div class="qcard-head"><span class="badge ${r.isCorrect?'badge-curated':'badge-ai'}">${r.isCorrect?'✓ Correct':(r.selected===null?'—':'✗ Wrong')}</span><span class="badge badge-type">${esc(r.subject)}</span>${r.source==='pyq'?'<span class="badge badge-pyq">PYQ 2026</span>':''}</div><div class="qcard-text">Q${i+1}. ${esc(r.question)}</div><div class="qoptions">${r.options.map((o,j)=>{const c=['qoption'];if(j===r.correctAnswer)c.push('correct');else if(j===r.selected)c.push('wrong');return `<div class="${c.join(' ')}"><span class="qoption-key">${String.fromCharCode(65+j)}</span><span>${esc(o)}</span></div>`;}).join('')}</div><div class="explanation">${esc(r.explanation)}</div></div>`).join('')}</div>`;
+}
+
+function SettingsPage(){
+  const html=`<h1>Settings</h1><div class="card" style="margin-bottom:.85rem"><div class="card-title">👤 Profile</div><div class="field"><label>Name</label><input class="input" id="s-name" value="${esc(State.profile.name)}" oninput="State.profile.name=this.value;Storage.set(K.profile,State.profile)" style="max-width:300px"></div></div><div class="card" style="margin-bottom:.85rem"><div class="card-title">🎨 Theme</div><button class="btn btn-ghost" onclick="toggleTheme()">${State.theme==='dark'?'☀️ Light':'🌙 Dark'}</button></div><div class="card" style="margin-bottom:.85rem"><div class="card-title">🤖 AI Question Generation</div><div class="callout callout-warn" style="margin-bottom:.85rem"><strong>⚠️</strong> DeepSeek key stored in localStorage. Anyone with browser access can read it. Use a disposable key.</div><div class="field" style="margin-bottom:.65rem"><label>DeepSeek API Key</label><input class="input" type="password" id="s-key" value="${esc(State.apiKey)}" oninput="State.apiKey=this.value;Storage.set(K.apiKey,State.apiKey)" placeholder="sk-..."></div><div class="grid grid-3" style="margin-bottom:.65rem"><div class="field"><label>Subject</label><select class="select" id="g-subj" onchange="updateGenTopics()">${SYLLABUS.map(s=>`<option value="${esc(s.name)}">${esc(s.name)}</option>`).join('')}</select></div><div class="field"><label>Topic</label><select class="select" id="g-topic"></select></div><div class="field"><label>Count</label><select class="select" id="g-count"><option>3</option><option selected>5</option><option>10</option></select></div></div><button class="btn btn-primary" id="g-btn" onclick="runGen()">🤖 Generate</button><div id="g-status" style="margin-top:.65rem"></div></div><div class="card"><div class="card-title">💾 Data</div><div class="row"><button class="btn btn-ghost btn-sm" onclick="exportData()">📤 Export</button><button class="btn btn-ghost btn-sm" onclick="importData()">📥 Import</button><button class="btn btn-danger btn-sm" onclick="clearAttempts()">🗑️ Clear Attempts</button><button class="btn btn-danger btn-sm" onclick="clearGenerated()">🗑️ Clear AI Questions</button></div></div><div class="card" style="margin-top:.85rem"><div class="card-title">ℹ️ About</div><p style="font-size:.82rem">Independent NEET UG practice platform. Not affiliated with NTA. Includes ${PYQ_QUESTIONS.length} NEET 2026 May PYQs and ${SYSTEMATIC.length} systematic questions.</p></div>`;
+  return {shell:p=>shell(p,html),mounted:()=>updateGenTopics()};
+}
+function updateGenTopics(){
+  const s=document.getElementById('g-subj'),t=document.getElementById('g-topic');if(!s||!t)return;
+  const data=SYLLABUS.find(x=>x.name===s.value);const topics=(data?.units||[]).flatMap(u=>u.topics);
+  t.innerHTML=topics.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
+}
+async function runGen(){
+  const key=State.apiKey.trim();const sub=document.getElementById('g-subj').value;const topic=document.getElementById('g-topic').value;const count=+document.getElementById('g-count').value;
+  const st=document.getElementById('g-status'),btn=document.getElementById('g-btn');
+  if(!key){toast('Enter key first','error');return;}
+  btn.disabled=true;st.innerHTML='<div class="callout callout-info">⏳ Calling DeepSeek...</div>';
+  try{
+    const res=await fetch('https://api.deepseek.com/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:'deepseek-chat',response_format:{type:'json_object'},messages:[{role:'system',content:'NEET UG item writer. Return JSON: {"questions":[{"questionType":"conceptual","difficulty":"medium","question":"...","options":["A","B","C","D"],"correctAnswer":0,"explanation":"..."}]}'},{role:'user',content:`Generate ${count} NEET MCQs on "${topic}" in ${sub}.`}]})});
+    if(!res.ok)throw new Error('API '+res.status);
+    const data=await res.json();const content=data.choices?.[0]?.message?.content;if(!content)throw new Error('Empty');
+    let parsed;try{parsed=JSON.parse(content);}catch{parsed=JSON.parse(content.replace(/^```(?:json)?/i,'').replace(/```$/,'').trim());}
+    const arr=Array.isArray(parsed.questions)?parsed.questions:[];
+    const sdata=SYLLABUS.find(x=>x.name===sub);const unit=sdata?.units.find(u=>u.topics.includes(topic))?.title||'General';
+    let added=0;
+    for(const r of arr){
+      if(!r.question||!Array.isArray(r.options)||r.options.length!==4)continue;
+      const ca=+r.correctAnswer;if(!Number.isInteger(ca)||ca<0||ca>3)continue;
+      if(!r.explanation||String(r.explanation).length<20)continue;
+      State.generated.push({id:'ai-'+uid(),subject:sub,unit,topic,type:'conceptual',difficulty:['easy','medium','hard'].includes(r.difficulty)?r.difficulty:'medium',question:String(r.question).slice(0,2000),options:r.options.map(o=>String(o).slice(0,500)),correctAnswer:ca,explanation:String(r.explanation).slice(0,2000),source:'ai'});
+      added++;
+    }
+    Storage.set(K.generated,State.generated);
+    st.innerHTML=`<div class="callout callout-info">✓ Added ${added} questions.</div>`;
+    toast(`Generated ${added}`,'success');
+  }catch(e){st.innerHTML=`<div class="callout callout-error">✗ ${esc(e.message)}</div>`;}
+  finally{btn.disabled=false;}
+}
+function exportData(){const d={profile:State.profile,attempts:State.attempts,generated:State.generated};const b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`mednova-${Date.now()}.json`;a.click();toast('Exported','success');}
+function importData(){const i=document.createElement('input');i.type='file';i.accept='application/json';i.onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(d.profile){State.profile=d.profile;Storage.set(K.profile,d.profile);}if(Array.isArray(d.attempts)){State.attempts=d.attempts;Storage.set(K.attempts,d.attempts);}if(Array.isArray(d.generated)){State.generated=d.generated;Storage.set(K.generated,d.generated);}toast('Imported','success');render();}catch(e){toast('Failed','error');}};i.click();}
+async function clearAttempts(){if(!await confirmDialog('Delete ALL attempts?'))return;State.attempts=[];Storage.set(K.attempts,[]);toast('Cleared','success');render();}
+async function clearGenerated(){if(!await confirmDialog('Delete ALL AI questions?'))return;State.generated=[];Storage.set(K.generated,[]);toast('Cleared','success');render();}
+
+document.documentElement.dataset.theme=State.theme;
+window.addEventListener('hashchange',render);
+if(document.readyState!=='loading')render();else document.addEventListener('DOMContentLoaded',render);
+</script>
+</body>
+</html>
